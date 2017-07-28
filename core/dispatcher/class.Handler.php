@@ -17,34 +17,43 @@ abstract class Handler
 	private $routeData;
 
 	/**
-	 * Подготовка сущности к обработке.
-	 * Порядок выполнения: 1.
+	 * Prepare to processing.
+	 * Execution order: 1.
 	 */
 	protected function Prepare() { }
 
 	/**
-	 * Предобработка.
-	 * Порядок выполнения: 2.
+	 * Preprocessing.
+	 * Execution order: 2.
 	 */
 	protected function Preprocess() { }
 
 	/**
-	 * Обработка.
-	 * Порядок выполнения: 3.
+	 * Processing.
+	 * Execution order: 3.
 	 */
 	protected abstract function Process();
 
 	/**
-	 * Постобработка.
-	 * Порядок выполнения: 4.
+	 * Postprocessing.
+	 * Execution order: 4.
 	 */
 	protected function Postprocess() { }
 
-	protected function RouteContainsComponent(string $component)
+	/**
+	 * Determines is handler route contains specified component.
+	 * @param string $component Component of the route.
+	 * @return bool True, if handler route contains specified component.
+	 */
+	protected function RouteContainsComponent(string $component) : bool
 	{
 		return in_array($component, $this->routeData->pathComponents, true);
 	}
 
+	/**
+	 * Executes handler.
+	 * @param RouteData $routeData Route data of the handler.
+	 */
 	public final function Execute(RouteData $routeData)
 	{
 		$this->routeData = $routeData;
