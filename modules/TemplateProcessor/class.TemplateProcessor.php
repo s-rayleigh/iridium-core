@@ -49,18 +49,35 @@ use modules\TemplateProcessor\constructions\MainConstruction;
 final class TemplateProcessor implements IModule
 {
 	/**
+	 * @var string Path to the template files.
+	 */
+	private static $templatesPath;
+
+	/**
 	 * Initializes module.
 	 * @param array $moduleConfig Module config array.
 	 */
-	static function Init(array $moduleConfig) { }
+	public static function Init(array $moduleConfig)
+	{
+		self::$templatesPath = $moduleConfig['templates_path'];
+	}
 
 	/**
 	 * Returns array of required modules.
 	 * @return array Required modules.
 	 */
-	static function GetRequiredModules(): array
+	public static function GetRequiredModules(): array
 	{
 		return [];
+	}
+
+	/**
+	 * Sets templates path.
+	 * @param string $path Path to the template files.
+	 */
+	public static function SetTemplatesPath(string $path)
+	{
+		self::$templatesPath = $path;
 	}
 
 	/**
@@ -71,14 +88,8 @@ final class TemplateProcessor implements IModule
 	 */
 	public static function ProcessTemplate($templateName, array $vars = array())
 	{
-		Log::Debug("Обработка шаблона $templateName.");
-		
-		//Считываем данные файла шаблона
-		$templateData = file_get_contents(TEMPLATES_PATH . $templateName);
-		
-		//Если данные файла шаблона не были считаны - возвращаем false
+		$templateData = file_get_contents(self::$templatesPath . $templateName);
 		if($templateData === false) { return false; }
-
 		$templateData = str_replace(array("\n", "\r", "\t"), '', $templateData);
 
 		try
