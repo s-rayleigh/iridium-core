@@ -22,16 +22,11 @@
  * @version 0.1-indev
  */
 
-//Если не выставлена временная зона по умолчанию в php.ini
-//date_default_timezone_set(date_default_timezone_get());
-
-//Отображаем ошибки на странице
 //TODO: to parameters
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 require 'core/constants.php';
-include 'site/constants.php';
 
 require 'config/config.php';
 require 'config/php_params.php';
@@ -70,6 +65,7 @@ require 'core/dispatcher/class.RestrictedAccessHandler.php';
 require 'core/module/class.ModulesManager.php';
 require 'core/module/intefrace.IModule.php';
 
+//Request
 require 'core/http/request/class.ContentType.php';
 require 'core/http/request/class.Method.php';
 require 'core/http/request/class.Request.php';
@@ -85,13 +81,6 @@ require 'core/http/filter/interface.IFilter.php';
 require 'core/http/filter/class.DefaultFilter.php';
 
 require 'core/http/class.HTTP.php';
-require 'core/class.Database.php';
-//require 'core/class.UsersGroup.php';
-
-//require 'core/class.Session.php';
-//require 'core/class.EmailLetter.php';
-
-//require 'core/class.SidePanel.php';
 require 'core/class.Operation.php';
 
 
