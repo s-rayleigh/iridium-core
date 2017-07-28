@@ -48,6 +48,10 @@ final class Cryptocurrency implements IModule
 
 	private $password;
 
+	/**
+	 * Initializes module.
+	 * @param array $moduleConfig Module config array.
+	 */
 	public static function Init(array $moduleConfig)
 	{
 		self::$defaultHost = $moduleConfig['host'];
