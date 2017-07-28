@@ -38,4 +38,4 @@ session_cache_limiter('nocache');
 ini_set('session.hash_function', 'sha256');
 
 //Название сессии
-session_name(SITE_CODE_NAME);
+session_name('iridium');
