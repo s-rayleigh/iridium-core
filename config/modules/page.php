@@ -1,6 +1,6 @@
 <?php
 /**
- * Page module config.
+ * Page module parameters.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -27,17 +27,15 @@
 return
 [
 	//Path to the javascript files
-	'js_path' => '',
+	'js_path' => 'public/js/',
 	//Path to the css files
-	'css_path' => '',
+	'css_path' => 'public/css/',
 	//Path to the images
-	'img_path' => '',
-	//Path to the templates
-	'tpl_path' => '',
+	'img_path' => 'public/images/',
 	//Google Analytics
 	'google_analytics' =>
 	[
 		'enabled' => false,
-		'id' => 'UA-27810870-3'
+		'id' => 'enter your GA id there'
 	]
 ];

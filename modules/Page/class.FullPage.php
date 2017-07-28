@@ -31,20 +31,52 @@ use modules\TemplateProcessor\TemplateProcessor;
  */
 abstract class FullPage extends Page
 {
+	/**
+	 * @var string Title of the page.
+	 */
+	private $title = '';
+
+	/**
+	 * @var array JSON data that will be placed in 'pageData' javascript variable on the page.
+	 */
 	private $jsonVars = [];
 
+	/**
+	 * @var array Included CSS files.
+	 */
 	private $css = [];
 
+	/**
+	 * @var array Included JS files.
+	 */
 	private $js = [];
 
-	protected final function AssignToJson(array $vars)
+	/**
+	 * Sets page title.
+	 * @param string $title Page title.
+	 */
+	public function SetTitle(string $title)
+	{
+		$this->title = $title;
+	}
+
+	/**
+	 * Assigns variables to the 'pageData' javascript variable.
+	 * @param array $vars Variables.
+	 */
+	protected final function AssignJsData(array $vars)
 	{
 		$this->jsonVars += $vars;
 	}
 
-	public final function AddCss(string $file)
+	/**
+	 * Includes CSS file to the page.
+	 * Extension must be omitted.
+	 * @param string $file CSS file name.
+	 */
+	public final function IncludeCss(string $file)
 	{
-		$name = CSS_PATH . $file . '.css';
+		$name = self::$moduleConfig['css_path'] . $file . '.css';
 		if(in_array($name, $this->css))
 		{
 			return;
@@ -52,9 +84,14 @@ abstract class FullPage extends Page
 		$this->css[] = $name;
 	}
 
-	public final function AddCssToStart($file)
+	/**
+	 * Includes CSS file at the beginning of the list to the page.
+	 * Extension must be omitted.
+	 * @param string $file CSS file name.
+	 */
+	public final function IncludeFirstCss(string $file)
 	{
-		$path = CSS_PATH . $file . '.css';
+		$path = self::$moduleConfig['css_path'] . $file . '.css';
 
 		if(in_array($path, $this->css))
 		{
@@ -64,9 +101,14 @@ abstract class FullPage extends Page
 		array_unshift($this->css, $path);
 	}
 
-	protected final function AddJs($file)
+	/**
+	 * Includes JS file to the page.
+	 * Extension must be omitted.
+	 * @param string $file JS file name.
+	 */
+	protected final function IncludeJs(string $file)
 	{
-		$name = JS_PATH . $file . '.js';
+		$name = self::$moduleConfig['js_path'] . $file . '.js';
 
 		if(in_array($name, $this->js))
 		{
@@ -76,7 +118,11 @@ abstract class FullPage extends Page
 		$this->js[] = $name;
 	}
 
-	protected final function AddExternalJs($url)
+	/**
+	 * Includes external JS file to the page by URL.
+	 * @param string $url URL of the JS file.
+	 */
+	protected final function IncludeExternalJs(string $url)
 	{
 		if(in_array($url, $this->js))
 		{
@@ -86,72 +132,33 @@ abstract class FullPage extends Page
 		$this->js[] = $url;
 	}
 
-	protected  function ProcessPage(string $template, array $vars): string
+	protected function Prepare()
+	{
+		parent::Prepare();
+
+		//Google Analytics
+		if(self::$moduleConfig['google_analytics']['enabled'])
+		{
+			$this->IncludeExternalJs('//www.google-analytics.com/analytics.js');
+			$this->IncludeJs('google_analytics'); //TODO: place js file
+			$this->AssignJsData(['gaId' => self::$moduleConfig['google_analytics']['id']]);
+		}
+	}
+
+	protected function ProcessPage(string $template, array $vars): string
 	{
 		$generatedPage = TemplateProcessor::ProcessTemplate($template, $vars);
-		echo TemplateProcessor::ProcessTemplate('page_structure.tpl', ['page' => $generatedPage]);
-	}
+		$pageData = '<script>pageData=' . json_encode($this->jsonVars) . '</script>';
 
-	/**
-	 * Генерирует js код из массива переменных js.
-	 * @deprecated
-	 */
-	private function GenerateJsVariables()
-	{
-		if(empty($this->jsVars) && empty($this->jsonVars))
-		{
-			return '';
-		}
-
-		$result = '<script>var ';
-
-		foreach($this->jsVars as $name => $value)
-		{
-			$value = $this->GetJSVarVal($value);
-
-			//Если переменная - массив
-			if(is_array($value))
-			{
-				$buf = '[';
-
-				for($j = 0; $j < count($value); $j++)
-				{
-					$buf .= $this->GetJSVarVal($value[$j]) . ($j === (count($value) - 1) ? '' : ',');
-				}
-
-				$value = $buf . ']';
-			}
-
-			$result .= $name . '=' . str_replace("\\", "\\\\", $value) . ',';
-		}
-
-		foreach($this->jsonVars as $name => $value)
-		{
-			$result .= "$name=$value,";
-		}
-
-		return substr($result, 0, -1) . ';</script>';
-	}
-
-	/**
-	 * Преобразовывает значение для правильного определения в js коде.
-	 * @param $val
-	 * @return string
-	 * @deprecated
-	 */
-	private function GetJSVarVal($val)
-	{
-		if(is_bool($val))
-		{
-			return $val ? 'true' : 'false';
-		}
-		if(is_string($val))
-		{
-			return "'$val'";
-		}
-		else
-		{
-			return $val;
-		}
+		return TemplateProcessor::ProcessTemplate(
+			'page_structure.tpl',
+			[
+				'title' => $this->title,
+				'page' => $generatedPage,
+				'js_page_data' => $pageData,
+				'css' => $this->css,
+				'js' => $this->js,
+			]
+		);
 	}
 }

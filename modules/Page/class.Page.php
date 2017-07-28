@@ -38,16 +38,32 @@ abstract class Page extends RestrictedAccessHandler implements IModule
 	 */
 	private $vars = [];
 
+	/**
+	 * @var array Module config.
+	 */
+	protected static $moduleConfig;
+
+	/**
+	 * Initializes module.
+	 * @param array $moduleConfig Module config array.
+	 */
 	public static function Init(array $moduleConfig)
 	{
-
+		self::$moduleConfig = $moduleConfig;
 	}
 
+	/**
+	 * Returns array of required modules.
+	 * @return array Required modules.
+	 */
 	public static function GetRequiredModules() : array
 	{
 		return ['TemplateProcessor'];
 	}
-	
+
+	/**
+	 * @return string Template name of the page.
+	 */
 	protected abstract function GetTemplateName() : string;
 
 	/**
@@ -67,24 +83,17 @@ abstract class Page extends RestrictedAccessHandler implements IModule
 		$this->vars = [];
 	}
 
-
-	protected final function Prepare()
-	{
-
-		//Google analytic
-		if(GA_ENABLE)
-		{
-			$this->AddExternalJs('//www.google-analytics.com/analytics.js');
-			$this->AddJs('google_analytics');
-			$this->AssignToJs(['gaId' => GA_ID]); //Идентификатор отслеживания
-		}
-	}
-
 	protected final function Process()
 	{
 		echo $this->ProcessPage($this->GetTemplateName(), $this->vars);
 	}
 
+	/**
+	 * Processes page and returns page content.
+	 * @param string $template Template name of the page.
+	 * @param array $vars Template variables.
+	 * @return string Page content.
+	 */
 	protected abstract function ProcessPage(string $template, array $vars) : string;
 
 }
