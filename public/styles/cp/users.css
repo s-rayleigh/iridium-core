@@ -1,0 +1,52 @@
+.avatar
+{
+	border-radius: 50%;
+	height: 80px;
+	width: 80px;
+	background-color: #5C9EF3;
+}
+
+.no-avatar-pad
+{
+	padding: 10px;
+}
+
+.plank .description
+{
+	display: flex;
+	align-items: center;
+}
+
+.plank .info
+{
+	margin-left: 15px;
+}
+
+.plank .name
+{
+	font-size: inherit;
+}
+
+.plank .status
+{
+	color: white;
+	font-weight: bold;
+	margin-left: 5px;
+	padding: 2px 3px;
+	border-radius: 2px;
+}
+
+.plank .status.full-access
+{
+	background: limegreen;
+}
+
+.plank .status.ban
+{
+	background: indianred;
+}
+
+.plank .login
+{
+	font-size: 15px;
+}

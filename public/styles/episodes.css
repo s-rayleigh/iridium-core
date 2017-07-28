@@ -1,0 +1,102 @@
+/**
+ * ================================================
+ * 					Эпизоды
+ * ================================================
+ */
+
+.episodes-container
+{
+	margin-top: 10px;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.episodes .episode
+{
+	width: 240px;
+	margin-right: 15px;
+	margin-bottom: 10px;
+}
+
+.episodes .episode a
+{
+	color: inherit;
+}
+
+.episodes .episode a:hover
+{
+	text-decoration: underline;
+}
+
+.episodes .episode .preview
+{
+	display: block;
+	width: 100%;
+	height: 135px;
+}
+
+.episodes .episode > p
+{
+	margin-top: 2px;
+}
+
+.episode .name
+{
+	display: inline-block;
+}
+
+.episode .name > a
+{
+	font-size: 15px;
+	font-weight: 300;
+}
+
+.episode .channel
+{
+	color: rgba(0,0,0,0.57);
+}
+
+.episodes .info
+{
+	color: rgba(0,0,0,0.57);
+	font-size: 11px;
+	margin-top: 2px;
+}
+
+.episodes .info *
+{
+	vertical-align: middle;
+}
+
+.episodes .info * + span
+{
+	margin-left: 20px;
+}
+
+.episodes .info img,
+.episodes .info svg
+{
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 7px;
+	width: 15px;
+}
+
+.episodes .info svg *
+{
+	fill: #F0C620;
+}
+
+/**
+ * ================================================
+ * 				Кнопка "загрузить еще"
+ * ================================================
+ */
+
+button.load-more
+{
+	display: block;
+	width: 12%;
+	min-width: 130px;
+	margin: 15px auto 0;
+}

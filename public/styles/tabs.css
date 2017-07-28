@@ -1,0 +1,47 @@
+/**
+ * ================================================
+ * 						Кнопки
+ * ================================================
+ */
+
+.tabs-buttons
+{
+	text-align: center;
+	font-size: 0;
+	line-height: 0;
+}
+
+.tabs-buttons button
+{
+	display: inline-block;
+	min-width: 150px;
+	border-radius: 0;
+	height: 30px;
+	transition: 0.1s;
+}
+
+.tabs-buttons button:active,
+.tabs-buttons button.active
+{
+	transform: none;
+	box-shadow: none;
+	background: #ffd321;
+}
+
+.tabs-buttons button:first-child
+{
+	border-radius: 2px 0 0 2px;
+}
+
+.tabs-buttons button:last-child
+{
+	border-radius: 0 2px 2px 0;
+}
+
+/**
+ * ================================================
+ * 						Вкладки
+ * ================================================
+ */
+
+.tabs { margin-top: 10px; }

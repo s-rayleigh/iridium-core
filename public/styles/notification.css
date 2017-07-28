@@ -1,0 +1,78 @@
+.notification
+{
+	position: absolute;
+	padding: 18px;
+	max-width: 350px;
+	z-index: 1000;
+	border-radius: 1px;
+}
+
+.notification span
+{
+	font-size: 14px;
+}
+
+.notification .close-cross
+{
+	width: 12px;
+	height: 12px;
+}
+
+.notification .close-cross g
+{
+	stroke-width: 2.5;
+}
+
+/* Стили всплывающих подсказок */
+
+.notification.info
+{
+	background: white;
+}
+
+.notification.error
+{
+	background: #F44336;
+	color: white;
+}
+
+.notification.error .close-cross g
+{
+	stroke: white;
+}
+
+.notification.error .close-cross:hover g
+{
+	stroke: #B71C1C;
+}
+
+.notification.success
+{
+	background: #4CAF50;
+	color: white;
+}
+
+.notification.success .close-cross g
+{
+	stroke: #E8F5E9;
+}
+
+.notification.success .close-cross:hover g
+{
+	stroke: #1B5E20;
+}
+
+.notification.warning
+{
+	background: #FFEB3B;
+}
+
+.notification.warning .close-cross g
+{
+	stroke: #655E1F;
+}
+
+.notification.warning .close-cross:hover g
+{
+	stroke: #F57F17;
+}

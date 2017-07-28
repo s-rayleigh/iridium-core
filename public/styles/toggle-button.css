@@ -1,0 +1,10 @@
+toggle-button
+{
+	display: inline-block;
+	text-align: center;
+}
+
+toggle-button > *
+{
+	vertical-align: middle;
+}

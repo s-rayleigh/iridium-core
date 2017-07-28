@@ -1,0 +1,72 @@
+.menu > a.active:after
+{
+	border-color: transparent #eaeaea transparent transparent;
+}
+
+.menu > a.active:before
+{
+	background: #5C9EF3;
+}
+
+.admin-access
+{
+	display: block;
+	color: white;
+	margin: 10px 3px 0 3px;
+	padding: 7px 5px;
+	font-size: 12px;
+	border: 1px dashed #5C9EF3;
+}
+
+.admin-access a
+{
+	color: inherit;
+	font-weight: bold;
+	transition: 0.1s;
+}
+
+.admin-access a:hover
+{
+	text-decoration: underline;
+}
+
+/* Mobile menu */
+@media (max-width: 700px)
+{
+	menu
+	{
+		width: 40px;
+	}
+
+	.logo
+	{
+		display: none;
+	}
+
+	.menu
+	{
+		margin-top: 0;
+	}
+
+	.menu a > span
+	{
+		display: none;
+	}
+
+	.menu a
+	{
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.menu a > img
+	{
+		width: 100%;
+		margin-right: 0;
+	}
+
+	.menu > a.active:after
+	{
+		display: none;
+	}
+}

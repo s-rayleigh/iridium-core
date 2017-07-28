@@ -1,0 +1,63 @@
+file-uploader
+{
+	margin-top: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #d3d3d3;
+	border-radius: 1px;
+}
+
+file-uploader > .message
+{
+	padding: 10px 0;
+	min-height: 90px;
+	width: 200px;
+	text-align: center;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+file-uploader > .message.default
+{
+	color: rgba(0,0,0,0.38);
+	cursor: pointer;
+}
+
+file-uploader .progress-bar
+{
+	position: relative;
+	width: 80%;
+	height: 20px;
+	margin: 5px auto;
+	padding: 1px;
+	border: 1px solid #5C9EF3;
+	border-radius: 2px;
+}
+
+file-uploader .progress-bar > :not(.progress)
+{
+	height: 100%;
+	background: #5C9EF3;
+}
+
+file-uploader .progress-bar .progress
+{
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 13px;
+}
+
+file-uploader a
+{
+	font-size: 13px;
+}

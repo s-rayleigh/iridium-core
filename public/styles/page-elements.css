@@ -1,0 +1,88 @@
+/**
+ * ================================================
+ * 						Название
+ * ================================================
+ */
+
+.name-container
+{
+	display: flex;
+}
+
+.name-container .name
+{
+	font-size: 18px;
+	font-weight: 300;
+	flex-grow: 1;
+	line-height: 1;
+}
+
+/**
+ * ================================================
+ * 						Подписка
+ * ================================================
+ */
+
+.subscribe-container toggle-button,
+.btn-subscribe
+{
+	height: 30px;
+	width: 130px;
+	margin-left: 10px;
+	padding-left: 7px;
+	padding-right: 7px;
+	position: relative;
+	flex-shrink: 0;
+}
+
+.subscribe-container toggle-button div,
+.btn-subscribe div
+{
+	font-weight: inherit;
+	position: absolute;
+	display: inline-block;
+	width: 130px;
+	left: 0;
+	height: 30px;
+}
+
+.subscribe-container toggle-button img,
+.btn-subscribe img
+{
+	height: 70%;
+	margin-right: 7px;
+}
+
+/**
+ * ================================================
+ * 					Кнопка отмены
+ * ================================================
+ */
+
+button.cancel > :first-child,
+toggle-button.cancel > :first-child
+{
+	transition: 0.2s;
+}
+
+button.cancel > :first-child + *,
+toggle-button.cancel > :first-child + *
+{
+	transition: 0.2s;
+	visibility: hidden;
+	opacity: 0;
+}
+
+button.cancel:hover > :first-child,
+toggle-button.cancel:hover > :first-child
+{
+	visibility: hidden;
+	opacity: 0;
+}
+
+button.cancel:hover > :first-child + *,
+toggle-button.cancel:hover > :first-child + *
+{
+	visibility: visible;
+	opacity: 1;
+}

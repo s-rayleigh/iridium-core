@@ -1,0 +1,36 @@
+body
+{
+	background: black;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+.message
+{
+	color: darkred;
+	font-size: 3vw;
+	font-weight: bold;
+	text-align: center;
+}
+
+.exit-link
+{
+	display: inline-block;
+	margin-top: 20px;
+	font-size: 1vw;
+	color: white;
+}
+
+.exit-link *
+{
+	vertical-align: middle;
+}
+
+.exit-link img
+{
+	margin-right: 5px;
+	width: 30px;
+	height: 30px;
+}

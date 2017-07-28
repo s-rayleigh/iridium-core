@@ -1,0 +1,304 @@
+@import url('//fonts.googleapis.com/css?family=Fira+Sans:400,300,500,700&subset=latin,cyrillic');
+
+*
+{
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	outline: none;
+	font-family: 'Fira Sans', 'Roboto', sans-serif;
+	font-weight: normal;
+	font-style: normal;
+}
+
+body
+{
+	height: 100vh;
+	min-width: 500px;
+	color: rgba(0,0,0,0.87);
+	background: #f5f5f5;
+	overflow: auto;
+}
+
+::selection			{ background: #F0C620; }
+::-moz-selection	{ background: #F0C620; }
+
+/* Чтобы в Firefox не было выделения кнопок пунктиром при нажатии */
+input::-moz-focus-inner,
+button::-moz-focus-inner
+{ border: 0; }
+
+.unselectable
+{
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+main
+{
+	height: 100%;
+	overflow: auto;
+	font-size: 13px;
+}
+
+a, a:visited
+{
+	cursor: pointer;
+	text-decoration: none;
+	color: rgba(0,0,0,0.57);;
+}
+
+a:hover
+{
+	text-decoration: underline;
+}
+
+.block
+{
+	background: white;
+	padding: 20px;
+	margin: 20px;
+	border-radius: 1px;
+}
+
+.block-shadow
+{
+	box-shadow: 0 1px 5px 0 rgba(0,0,0,0.2);
+}
+
+/* Средний текст */
+.medium
+{
+	font-size: 16px;
+	font-weight: 400;
+	vertical-align: middle;
+}
+
+/* Маленький текст */
+.small
+{
+	font-weight: 400;
+	font-size: 11px;
+	vertical-align: middle;
+}
+
+/* Надстрочный текст */
+.exp
+{
+	vertical-align: super;
+}
+
+/* Выделение текста */
+.highlight
+{
+	text-decoration: underline;
+}
+
+.information
+{
+	position: relative;
+	cursor: help;
+}
+
+.information:before
+{
+	content: 'i';
+	position: absolute;
+	top: -5px;
+	right: -5px;
+	font-size: 11px;
+	font-weight: 700;
+	color: rgba(0,0,0,0.15);
+	border-radius: 50%;
+	text-shadow: 0 0 6px rgba(0,0,0,0.2);
+	font-style: italic;
+}
+
+/* ================ */
+
+form { position: relative; }
+
+.field-error
+{
+	position: absolute;
+	max-width: 400px;
+	border-radius: 2px;
+	background: #D4462B;
+	padding: 5px;
+	color: white;
+	z-index: 998;
+	text-align: left;
+}
+
+.field-error:before
+{
+	content: '';
+	position: absolute;
+	z-index: -1;
+	width: 10px;
+	height: 10px;
+	-moz-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+    top: -5px;
+    left: 9px;
+    background: #D4462B;
+}
+
+/* =====- Отключаем кнопки в number field -===== */
+
+input[type=number] { -moz-appearance:textfield; }
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button
+{
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* =====- Placeholder style -===== */
+
+::-webkit-input-placeholder	{ color: rgba(0,0,0,0.30); }
+:-moz-placeholder			{ color: rgba(0,0,0,0.30); } /* Firefox 18- */
+::-moz-placeholder			{ color: rgba(0,0,0,0.30); } /* Firefox 19+ */
+:-ms-input-placeholder		{ color: rgba(0,0,0,0.30); }
+
+/* =====- Крестик закрытия -===== */
+
+.close-cross
+{
+	position: absolute;
+	right: 4px;
+	top: 4px;
+	cursor: pointer;
+	width: 12px;
+	height: 12px;
+	transition: 0.15s;
+}
+
+.close-cross g
+{
+	transition: 0.3s;
+	stroke: #bbb;
+}
+
+.close-cross:hover g
+{
+	stroke: #F05661;
+}
+
+/* =====- Подсказка -===== */
+
+.tooltip-object
+{
+	position: fixed;
+	max-width: 450px;
+	padding: 7px;
+	z-index: 1000;
+	border-radius: 2px;
+	font-size: 13px;
+	color: white;
+	background: #1a1a1a;
+	opacity: 0.9;
+}
+
+.tooltip-object.top:after
+{
+	content: '';
+	position: absolute;
+	left: calc(50% - 8px);
+	bottom: -8px;
+
+	border-width: 8px 8px 0 8px;
+	border-color: #1a1a1a transparent transparent transparent;
+	border-style: solid;
+}
+
+.tooltip-object.bottom:after
+{
+	content: '';
+	position: absolute;
+	left: calc(50% - 8px);
+	top: -8px;
+
+	border-width: 0 8px 8px 8px;
+	border-color: transparent transparent #1a1a1a transparent;
+	border-style: solid;
+}
+
+.tooltip-object.left:after
+{
+	content: '';
+	position: absolute;
+	top: calc(50% - 8px);
+	right: -8px;
+
+	border-width: 8px 0 8px 8px;
+	border-color: transparent transparent transparent #1a1a1a;
+	border-style: solid;
+}
+
+.tooltip-object.right:after
+{
+	content: '';
+	position: absolute;
+	top: calc(50% - 8px);
+	left: -8px;
+
+	border-width: 8px 8px 8px 0;
+	border-color: transparent #1a1a1a transparent transparent;
+	border-style: solid;
+}
+
+/**
+ * ================================================
+ * 						Заголовки
+ * ================================================
+ */
+
+h1, h2, h3, h4, h5, h6
+{
+	font-weight: 400;
+	text-rendering: optimizeLegibility !important;
+	-webkit-font-smoothing: antialiased !important;
+	-moz-osx-font-smoothing: grayscale;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+	margin-bottom: 10px;
+}
+
+h1
+{
+	font-size: 25px;
+	color: rgba(0,0,0,0.57);
+}
+
+h2
+{
+	font-size: 20px;
+	color: rgba(0,0,0,0.57);
+}
+
+h3
+{
+	font-size: 16px;
+}
+
+h4
+{
+	font-size: 13px;
+}
+
+h5
+{
+	font-size: 11px;
+}
+
+h6
+{
+	font-size: 10px;
+}

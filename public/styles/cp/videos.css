@@ -1,0 +1,53 @@
+.info .stat + img, .info .stat + svg
+{
+	height: 18px;
+	margin-left: 5px;
+	margin-right: 20px;
+	vertical-align: middle;
+}
+
+.info svg *
+{
+	fill: #5C9EF3;
+}
+
+.description img
+{
+	width: 100px;
+	float: left;
+	border: 1px solid lightgray;
+	margin-right: 5px;
+}
+
+.stat { vertical-align: middle; }
+
+.video
+{
+	display: inline-block;
+	border-radius: 2px;
+	color: white;
+	background: #5C9EF3;
+	padding: 2px 3px;
+	font-weight: bold;
+	font-size: 12px;
+	margin: 2px 0;
+}
+
+.images
+{
+	position: relative;
+}
+
+.images .logo-img
+{
+	position: absolute;
+	width: 30px;
+	top: 5px;
+	left: 5px;
+	border: 1px dotted darkgray;
+}
+
+.images .page-img
+{
+
+}

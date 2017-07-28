@@ -1,0 +1,39 @@
+::selection { background: #5C9EF3; }
+::-moz-selection { background: #5C9EF3; }
+
+main
+{
+	padding: 20px 5px;
+}
+
+.parts-container
+{
+	display: flex;
+	align-items: flex-start;
+	align-content: flex-start;
+	flex-flow: row wrap;
+}
+
+.parts-container > h1
+{
+	flex: 1 100%;
+}
+
+.controls-container
+{
+	flex-grow: 0;
+}
+
+.blocks-container
+{
+	display: flex;
+	flex-wrap: wrap;
+
+	flex: 1;
+}
+
+h1
+{
+	margin: 5px 15px;
+	font-weight: bold;
+}

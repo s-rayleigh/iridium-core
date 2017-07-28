@@ -1,0 +1,6 @@
+.tabs-buttons button:active,
+.tabs-buttons button.active
+{
+	background: #70AEFF;
+	text-shadow: 0 2px 1px #5C9EF3;
+}

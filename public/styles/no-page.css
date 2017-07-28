@@ -1,0 +1,57 @@
+body, html
+{
+    background: #1a1a1a;
+    color: white;
+	overflow: auto;
+}
+
+.container-404
+{
+    margin: 170px auto 70px auto;
+    width: 400px;
+    padding: 5px;
+	text-align: center;
+	text-align-last: right;
+}
+
+.container-404 span:first-child
+{
+	font-size: 145px;
+	font-weight: bold;
+    text-shadow: 0 4px 0 #b9b9b9;
+	line-height: 1;
+}
+
+.container-404 span:last-child
+{
+    font-size: 20px;
+	font-weight: bold;
+    text-align: right;
+    color: #f0c620;
+	display: inline-block;
+}
+
+.pages
+{
+    font-size: 14px;
+    width: 350px;
+    margin: 0 auto;
+}
+
+.pages a
+{
+	display: block;
+	margin-top: 10px;
+	color: white;
+}
+
+.pages a > *
+{
+	vertical-align: middle;
+}
+
+.pages img
+{
+	height: 24px;
+	margin-right: 10px;
+}

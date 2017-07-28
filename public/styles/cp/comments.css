@@ -1,0 +1,24 @@
+.plank .login-container *
+{
+	vertical-align: middle;
+}
+
+.plank .avatar
+{
+	border-radius: 50%;
+	height: 35px;
+	width: 35px;
+	margin-right: 5px;
+	background-color: #5C9EF3;
+}
+
+.avatar.no-avatar-pad
+{
+	padding: 5px;
+}
+
+.plank time
+{
+	margin-top: 5px;
+	align-self: flex-end;
+}

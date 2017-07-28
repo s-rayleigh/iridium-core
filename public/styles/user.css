@@ -1,0 +1,83 @@
+/**
+ * ================================================
+ * 						Заголовок
+ * ================================================
+ */
+
+header
+{
+	display: flex;
+	align-items: center;
+}
+
+.info
+{
+	min-width: 200px;
+}
+
+.username
+{
+	font-size: 21px;
+	vertical-align: middle;
+}
+
+.info hr
+{
+	border: 0;
+    height: 1px;
+	background-image: linear-gradient(to right, rgba(0,0,0,0.38) 0%, transparent 100%);
+	margin: 5px 0;
+}
+
+/**
+ * ================================================
+ * 						Аватар
+ * ================================================
+ */
+
+.avatar
+{
+	display: block;
+	flex-shrink: 0;
+	align-self: flex-start;
+
+	margin-right: 30px;
+	vertical-align: middle;
+
+	border-radius: 50%;
+	height: 110px;
+	width: 110px;
+
+	background-color: #F0C620;
+}
+
+.no-avatar-pad
+{
+	padding: 10px;
+}
+
+/**
+ * ================================================
+ * 					Кнопка выхода
+ * ================================================
+ */
+
+.logout-link
+{
+	vertical-align: middle;
+	display: inline-block;
+	margin-left: 10px;
+	line-height: 0;
+}
+
+.logout-link img,
+.logout-link svg
+{
+	height: 32px;
+	width: 32px;
+}
+
+.logout-link svg *
+{
+	fill: #cecece;
+}

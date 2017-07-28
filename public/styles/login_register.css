@@ -1,0 +1,84 @@
+main
+{
+	text-align: center;
+}
+
+form
+{
+	display: inline-block;
+	vertical-align: middle;
+	background: white;
+	padding: 15px 25px;
+}
+
+form label
+{
+	cursor: pointer;
+	font-size: 13px;
+}
+
+.forms_separator
+{
+	display: inline-block;
+	width: 1px;
+	height: 100%;
+	vertical-align: middle;
+	margin: 0 25px;
+	background: linear-gradient(to top, rgba(0,0,0,0) 20%, #909090 50%, rgba(0,0,0,0) 80%);
+}
+
+@media (max-width: 1100px)
+{
+	.forms_separator
+	{
+		display: block;
+		height: 1px;
+		width: 100%;
+		margin: 0;
+		background: linear-gradient(to right, rgba(0,0,0,0) 20%, #909090 50%, rgba(0,0,0,0) 80%);
+	}
+
+	form
+	{
+		display: block;
+		margin: 20px auto;
+		max-width: 400px;
+		overflow: hidden;
+	}
+}
+
+caption
+{
+	font-size: 19px;
+	padding-bottom: 10px;
+}
+
+form td
+{
+	text-align: right;
+}
+
+form td:first-child
+{
+	padding-right: 10px;
+}
+
+form td[colspan="2"]
+{
+	padding: 0;
+}
+
+input
+{
+	margin: 3px 0;
+}
+
+input[type="submit"]
+{
+	font-size: 17px;
+	font-weight: 500;
+	width: 100%;
+	margin: 10px 0 0;
+	padding-top: 7px;
+	padding-bottom: 7px;
+}
