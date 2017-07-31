@@ -1,134 +1,195 @@
 <?php
+/**
+ * Contains Session class.
+ * This file is part of Iridium Core project.
+ *
+ * Iridium Core is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Iridium Core is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Iridium Core. If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @author rayleigh <rayleigh@protonmail.com>
+ * @copyright 2017 Vladislav Pashaiev
+ * @license LGPL-3.0+
+ * @version 0.1-indev
+ */
 
 namespace core;
 
-use core\http\filter\ValueType;
-use Exception;
-use core\http\HTTP;
-
 /**
- * Сессия.
+ * Session.
  * @package core
- * @author rayleigh <rayleigh@protonmail.com>
  */
-final class Session
+class Session
 {
 	/**
-	 * @var bool Был-ли создан объект сессии?
+	 * @var Session Instance of the session.
 	 */
-	private static $created = false;
+	private static $instace;
 
 	/**
-	 * Конструктор сессии.
-	 * @param int $userID Идентификатор пользователя.
-	 * @param int $groupId Идентификатор группы пользователей пользователя.
-	 * @throws Exception
+	 * Creates session object.
+	 * @throws \Exception If cannot start session.
 	 */
-	public function __construct($userID = -1, $groupId = -1)
+	protected function __construct()
 	{
-		//Не создаем, если сессия уже создана
-		if(self::$created)
-		{
-			return;
-		}
-
-		//Запускаем сессию
 		if(!session_start())
 		{
-			throw new Exception("Не удалось создать сессию!");
+			throw new \Exception('Can\'t create session.');
 		}
 
-		//Если пора генерировать идентификатор сессии заново
-		//Время задается константой SESSION_ID_LIFETIME в файле constants.php
 		if(isset($_SESSION['last_access']) && $_SESSION['last_access'] + SESSION_ID_LIFETIME < TIMESTAMP)
 		{
 			session_regenerate_id(true);
 		}
 
-		if(!isset($_SESSION['id'])) //Данные сессии не заполнены, т.е. сессия только-что создана. Пытаемся заполнить
+		if(!isset($_SESSION['created']))
 		{
-			if($userID === -1)
-			{
-				//Скорее всего у пользователя были куки, но его сессия не инициализирована.
-				self::Destroy();
-				HTTP::Redirect('index.php');
-			}
-
-			$_SESSION['id']    = (int)$userID;					//Идентификатор пользователя
-			$_SESSION['group'] = new UsersGroup($groupId);		//Группа пользователей
-			$_SESSION['ip']    = $_SERVER['REMOTE_ADDR'];		//IP пользователя
-			$_SESSION['agent'] = $_SERVER['HTTP_USER_AGENT'];	//Информация о браузере пользователя
-		}
-		else if($_SESSION['ip'] !== $_SERVER['REMOTE_ADDR'] || $_SESSION['agent'] !== $_SERVER['HTTP_USER_AGENT'])
-		{
-			//Удаляем сессию
-			self::Destroy();
-			throw new Exception("Изменился браузер или ip. Потребуется выполнить вход заново.");
+			$_SESSION['user_ip'] = $_SERVER['REMOTE_ADDR'];
+			$_SESSION['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+			$_SESSION['creation_time'] = TIMESTAMP;
+			$_SESSION['created'] = true;
 		}
 
-		//Если пользователя не существует
-		if(!(bool)Database::GetCell("SELECT COUNT(*) FROM `" . USERS . "` WHERE `id` = '{$_SESSION['id']}' LIMIT 1;"))
-		{
-			self::Destroy();
-			throw new Exception("Ваш аккаунт был удален, мы завершаем вашу последнюю сессию. Приносим свои глубочайшие извинения :D");
-		}
-
-		$_SESSION['last_access'] = TIMESTAMP; //Время последнего доступа
-
-		self::$created = true;
+		$_SESSION['last_access'] = TIMESTAMP;
 	}
 
 	/**
-	 * Уничтожает сессию, ее данные, и куки пользователя с идентификатором сессии.
+	 * Creates Session instance.
+	 * @return Session Created Session instance.
+	 * @throws \Exception If session is already created.
+	 */
+	public static function Create() : Session
+	{
+		if(isset(self::$instace))
+		{
+			throw new \Exception('Session is already created.');
+		}
+
+		self::$instace = new Session;
+		return self::$instace;
+	}
+
+	/**
+	 * Destroys session and all it's data.
 	 */
 	public static function Destroy()
 	{
-		setcookie(session_name(), '', time() - 42000);    //Удаляем cookies
-		session_unset();                                //Удаляем данные $_SESSION
-		session_destroy();                                //Удаляем все данные сессии
+		self::$instace = null;
+
+		// Delete cookies
+		setcookie(session_name(), '', time() - 42000);
+
+		// Unset $_SESSION
+		session_unset();
+
+		// Destroy session data
+		session_destroy();
 	}
 
 	/**
-	 * Определяет есть-ли в куках пользователя идентификатор сессии.
-	 * @return bool true, если да.
+	 * @return Session Session instance.
+	 * @throws \Exception If session is not created.
 	 */
-	public static function IsUserHasSessionId()
+	public static function GetInstance() : Session
+	{
+		if(!isset(self::$instace))
+		{
+			throw new \Exception('Session is not created.');
+		}
+
+		return self::$instace;
+	}
+
+	/**
+	 * @return bool True, if session is created.
+	 */
+	public static function IsCreated() : bool
+	{
+		return isset(self::$instace);
+	}
+
+	/**
+	 * @return string Session name.
+	 */
+	public static function GetSessionName() : string
+	{
+		return session_name();
+	}
+
+	/**
+	 * Sets session name.
+	 * @param string $name Session name.
+	 */
+	public static function SetSessionName(string $name)
+	{
+		session_name($name);
+	}
+
+	/**
+	 * @return bool True, if user has session id.
+	 */
+	public static function UserHasSessionId() : bool
 	{
 		return isset($_COOKIE[session_name()]);
 	}
 
 	/**
-	 * Определяет был-ли создан объект сессии.
-	 * @return bool true, если да.
+	 * @return string Returns user ip that the user had while initial session creation.
 	 */
-	public static function IsCreated() { return self::$created; }
-
-	/**
-	 * Определяет получен-ли доступ администратора используя секретный пароль администратора.
-	 * @return bool true, если да.
-	 */
-	public static function IsAdminAccess()
+	public function GetSessionIP() : string
 	{
-		return isset($_SESSION['admin_cake']) ? HTTP::GetCookie('cake', ValueType::STRING) === $_SESSION['admin_cake'] : false;
+		return $_SESSION['user_ip'];
 	}
 
 	/**
-	 * Возвращает группу, к которой принадленит пользователь.
-	 * @return UsersGroup Группа пользователей.
+	 * @return string Returns user agent that the user had while initial session creation.
 	 */
-	public static function GetUserGroup()
+	public function GetSessionUserAgent() : string
 	{
-		return $_SESSION['group'];
+		return $_SESSION['user_agent'];
 	}
 
 	/**
-	 * Определяет есть-ли у группы пользователей текущего пользователя указанные права доступа.
-	 * @param int $accessType Тип доступа.
-	 * @return bool True, если у группы есть указанные права.
+	 * Sets session data to the $_SESSION array.
+	 * @param string $key Array key.
+	 * @param mixed $value Value.
 	 */
-	public static function HasRights($accessType)
+	public function SetData(string $key, $value)
 	{
-		if(!isset($_SESSION['group'])) { return false; }
-		return $_SESSION['group']->HasRights($accessType);
+		$_SESSION[$key] = $value;
+	}
+
+	/**
+	 * Returns data from the $_SESSION array by specified key.
+	 * @param string $key Array key.
+	 * @return mixed Data obtained by the specified key.
+	 * @throws \OutOfRangeException The specified key is not present in $_SESSION array.
+	 */
+	public function GetData(string $key)
+	{
+		if(!isset($_SESSION[$key]))
+		{
+			throw new \OutOfRangeException("The specified key '$key' is not present in session array.");
+		}
+
+		return $_SESSION[$key];
+	}
+
+	/**
+	 * @param string $key Key.
+	 * @return bool True, if specified key is in $_SESSION array.
+	 */
+	public function HasData(string $key) : bool
+	{
+		return isset($_SESSION[$key]);
 	}
 }
