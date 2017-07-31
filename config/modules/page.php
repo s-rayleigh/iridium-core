@@ -23,16 +23,19 @@
  */
 
 
-//Do not remove any parameter, it might cause errors.
+// Do not remove any parameter, it might cause errors.
 return
 [
-	//Path to the javascript files
+	// Path to the javascript files
 	'js_path' => 'public/js/',
-	//Path to the css files
+
+	// Path to the css files
 	'css_path' => 'public/css/',
-	//Path to the images
+
+	// Path to the images
 	'img_path' => 'public/images/',
-	//Google Analytics
+
+	// Google Analytics
 	'google_analytics' =>
 	[
 		'enabled' => false,

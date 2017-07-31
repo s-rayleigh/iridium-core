@@ -136,11 +136,11 @@ abstract class FullPage extends Page
 	{
 		parent::Prepare();
 
-		//Google Analytics
+		// Google Analytics
 		if(self::$moduleConfig['google_analytics']['enabled'])
 		{
 			$this->IncludeExternalJs('//www.google-analytics.com/analytics.js');
-			$this->IncludeJs('google_analytics'); //TODO: place js file
+			$this->IncludeJs('google_analytics'); // TODO: place js file
 			$this->AssignJsData(['gaId' => self::$moduleConfig['google_analytics']['id']]);
 		}
 	}

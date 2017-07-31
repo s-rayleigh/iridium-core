@@ -15,11 +15,11 @@ ini_set('session.use_only_cookies', true);
 //Не использовать пользовательский session_id
 ini_set('session.use_strict_mode', true);
 
-//Cookies доступны только через HTTP и недоступны для Javascript
+//Cookies доступны только через HTTP и недоступны для javascript
 ini_set('session.cookie_httponly', true);
 
 //Указывает нужно-ли передавать cookies только по HTTPS
-ini_set('session.cookie_secure', HTTPS);
+ini_set('session.cookie_secure', false);
 
 //Максимальное время жизни файлов сессии
 ini_set('session.gc_maxlifetime', SESSION_LIFETIME);
@@ -36,6 +36,3 @@ session_cache_limiter('nocache');
 
 //Использовать алгоритм кеширования sha256 для создания session_id (идентификатора сессии)
 ini_set('session.hash_function', 'sha256');
-
-//Название сессии
-session_name('iridium');

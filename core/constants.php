@@ -1,98 +1,121 @@
 <?php
 /**
+ * Global constants.
+ * This file is part of Iridium Core project.
+ *
+ * Iridium Core is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Iridium Core is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Iridium Core. If not, see <http://www.gnu.org/licenses/>.
+ *
  * @author rayleigh <rayleigh@protonmail.com>
+ * @copyright 2017 Vladislav Pashaiev
+ * @license LGPL-3.0+
+ * @version 0.1-indev
  */
 
-
-//=========================- Основные константы -========================
 
 /**
- * Core version.
+ * Iridium Core version.
  * Format: <major version>.<minor version>[.<patch>][-alpha|beta|indev]
  */
-define('CORE_VERSION', '0.1-indev');
+define('IRIDIUM_CORE_VERSION', '0.1-indev');
 
-//=======================================================================
-
-//===========================- Основные пути -===========================
+//===============================- PATHS -===============================
 
 /**
  * Корневая директория сайта.
+ * @deprecated
  */
 define('ROOT_PATH', realpath(dirname(__FILE__)) . '/../');
 
 /**
  * Путь к директории кеша сайта.
+ * @deprecated
  */
 define('CACHE_PATH', 'storage/cache/');
 
 /**
  * Путь к хранилищу созданных или загруженных файлов.
+ * @deprecated
  */
 define('STORAGE_PATH', 'storage/');
 
 /**
  * Путь к файлам логов.
+ * @deprecated
  */
 define('LOG_FILES_PATH', STORAGE_PATH . 'logs/');
 
 /**
  * Путь к директории временных файлов, созданных в процессе работы сайта.
+ * @deprecated
  */
 define('TEMP_PATH', STORAGE_PATH . 'tmp/');
 
 /**
  * Path to the modules directory.
+ * @deprecated
  */
 define('MODULES_PATH', 'modules/');
 
 //=======================================================================
 
-//===============================- Время -===============================
+//================================- TIME -===============================
+
 /**
- * Время начала выполнения запроса
+ * Timestamp.
  */
 define('TIMESTAMP', time());
 
 /**
- * Основной формат времени для вывода на страницу.
+ * Main time format.
+ * @deprecated
  */
 define('TIME_FORMAT', 'd.m.Y H:i:s');
 
 /**
- * Использование HTTPS.
+ * @deprecated
  */
 define('HTTPS', false);
 
 /**
- * Время жизни файла сессии без обновления.
- * 12*60*60=43200, то бишь 12 часов.
+ * Session lifetime.
+ * 12*60*60=43200, etc 12 hrs.
  */
 define('SESSION_LIFETIME', 43200);
 
 /**
- * Время, через которое идентификатор сессии будет сгенерирован заново.
- * 60*60=3600, то бишь 1 час.
+ * Lifetime of the session id.
+ * 60*60=3600, 1 hr.
  */
 define('SESSION_ID_LIFETIME', 3600);
 
 //=======================================================================
 
-//============================- Логирование -============================
+//==============================- LOGGING -==============================
 
 /**
- * Включить логирование.
+ * Enable logging.
  */
 define('LOGGING_ENABLED', true);
 
 /**
- * Текущий уровень логирования сообщений.
+ * Current logging level.
  */
 define('LOG_LEVEL', 5);
 
 //=======================================================================
 
-//==============================- Daemons -==============================
+//==============================- DAEMONS -==============================
 
 /**
  * Режим отладки демонов.

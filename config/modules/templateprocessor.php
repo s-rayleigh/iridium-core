@@ -22,7 +22,6 @@
  * @version 0.1-indev
  */
 
-
 return
 [
 	'templates_path' => 'site/templates/'
