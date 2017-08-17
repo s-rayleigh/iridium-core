@@ -41,6 +41,11 @@ class Request
 	private $url;
 
 	/**
+	 * @var string Proxy URL.
+	 */
+	private $proxyUrl;
+
+	/**
 	 * @var string Method.
 	 */
 	private $method = Method::POST;
@@ -61,12 +66,18 @@ class Request
 	private $ignoreErrors = false;
 
 	/**
+	 * @var float Timeout of the request in seconds.
+	 */
+	private $timeout;
+
+	/**
 	 * Creates new HTTP request.
 	 * @param string $url URL.
 	 */
 	public function __construct($url = '')
 	{
 		$this->url = $url;
+		$this->timeout = (float)ini_get('default_socket_timeout');
 	}
 
 	/**
@@ -105,6 +116,17 @@ class Request
 	public function SetUrl(string $url) : self
 	{
 		$this->url = $url;
+		return $this;
+	}
+
+	/**
+	 * Sets proxy URL.
+	 * @param string $url Proxy URL.
+	 * @return Request Request.
+	 */
+	public function SetProxyUrl(string $url) : self
+	{
+		$this->proxyUrl = $url;
 		return $this;
 	}
 
@@ -159,6 +181,17 @@ class Request
 	}
 
 	/**
+	 * Sets timeout of the request.
+	 * @param float $timeout Timeout in seconds.
+	 * @return Request Request.
+	 */
+	public function SetTimeout(float $timeout) : self
+	{
+		$this->timeout = $timeout;
+		return $this;
+	}
+
+	/**
 	 * Sends request with specified content.
 	 * @param string $content Content.
 	 * @return bool|string Response text or false if error has occured.
@@ -207,7 +240,10 @@ class Request
 				'header'  => implode("\r\n", $this->headers) . "\r\n",
 				'method'  => $this->method,
 				'content' => is_string($content) ? $content : '',
-				'ignore_errors' => $this->ignoreErrors
+				'ignore_errors' => $this->ignoreErrors,
+				'proxy' => $this->proxyUrl,
+				'request_fulluri' => !empty($this->proxyUrl),
+				'timeout' => $this->timeout
 			]
 		];
 
