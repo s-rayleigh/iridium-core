@@ -90,11 +90,6 @@ use core\http\filter\ValueType;
 
 HTTP::RegisterFilter(new core\http\filter\DefaultFilter);
 
-//if(Session::IsUserHasSessionId())
-//{
-//	new Session;
-//}
-
 $modulesList = include('config/modules.php');
 
 if(!empty($modulesList))
