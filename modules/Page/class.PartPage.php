@@ -24,6 +24,8 @@
 
 namespace modules\Page;
 
+use modules\TemplateProcessor\TemplateProcessor;
+
 /**
  * Part page.
  * @package modules\Page
