@@ -1,6 +1,8 @@
 <?php
 /**
  * Daemon module.
+ * Requires Linux or Unix (not tested).
+ *
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -30,11 +32,9 @@ use site\classes\OperationError;
 use core\log\Log;
 
 /**
- * Фоновый процесс.
- *
- * Работает только в ОС Linux.
- *
- * @author rayleigh <rayleigh@protonmail.com>
+ * Daemon.
+ * TODO: rewrite
+ * @package modules\Daemon
  */
 abstract class Daemon implements IModule
 {
