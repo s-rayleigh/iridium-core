@@ -3,6 +3,9 @@
 use core\log\Log;
 use core\http\HTTP;
 
+
+// TODO: move to classes
+
 //Возвращает все позиции вхождения подстроки в строку
 //Возвращает false, если ни одного вхождения не найдено
 function FoundAllSubstrPos($text, $sub)
@@ -102,6 +105,7 @@ function MovePage($curPage, $pages, $move)
  * @param	string	$expr	Регулярное выражение
  * @param	string	$flags	Флаги регулярного выражения
  * @return	string			Итоговое регулярное выражение
+ * @deprecated
  */
 function GetValidRegexpr($expr, $flags = '')
 {
@@ -147,6 +151,7 @@ function ClampNumber($number, $min, $max)
  * Проверяет содержит-ли строка беззнаковое целое число
  * @param	string	$str	Строка, которую нужно проверить
  * @returns	bool			true, если строка содержит беззнаковое целое
+ * @deprecated
  */
 function StringContainsUint($str)
 {
@@ -192,6 +197,7 @@ function GetFileExtension($fileName)
  * @param	int		$aspRatWidth	Соотношение по X
  * @param	int		$aspRatHeight	Соотношение по Y
  * @return	bool
+ * @deprecated
  */
 function MatchAspectRatio($imagePath, $aspRatWidth, $aspRatHeight)
 {
@@ -211,7 +217,7 @@ function MatchAspectRatio($imagePath, $aspRatWidth, $aspRatHeight)
 	return $width / $height === $aspRatWidth / $aspRatHeight;
 }
 
-function MachineTimeFormat($timestamp)
+function MachineTimeFormat(int $timestamp)
 {
 	return date('c', $timestamp);
 }
@@ -219,17 +225,4 @@ function MachineTimeFormat($timestamp)
 function HumanTimeFormat($timestamp)
 {
 	return date(TIME_FORMAT, $timestamp);
-}
-
-function ProcessDescription($description)
-{
-	//Ссылки
-	$description = preg_replace('/\b(?:(http(s?):\/\/)|(?=www\.))(\S+)/is',
-								'<a href="http$2://$3" target="_blank">$1$3</a>',
-								$description);
-
-	//Переходы на новую строку
-	$description = str_replace("\n", '<br>', $description);
-
-	return $description;
 }
