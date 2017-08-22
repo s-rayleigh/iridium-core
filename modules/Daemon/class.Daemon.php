@@ -26,187 +26,288 @@
 
 namespace modules\Daemon;
 
-use core\exceptions\OperationException;
+require 'class.LockFile.php';
+
 use core\module\IModule;
-use site\classes\OperationError;
-use core\log\Log;
 
 /**
  * Daemon.
- * TODO: rewrite
  * @package modules\Daemon
  */
 abstract class Daemon implements IModule
 {
-	private $stop = false;	//Нужно-ли остановить демон
+	/**
+	 * @var string Directory for the lock files.
+	 */
+	private static $locksDir;
 
-	protected $daemonName;	//Имя демона (латиница)
-	protected $id;			//Идентификатор демона в БД
-	protected $sleepTime;	//Время сна между итерациями бесконнечного цикла
+	/**
+	 * @var bool Debug mode.
+	 */
+	private static $debugMode;
+
+	/**
+	 * @var string Daemon name.
+	 */
+	protected $name;
+
+	private $stop = false;
+
+	/**
+	 * @var LockFile Lock file.
+	 */
+	private $lockFile;
 
 	/**
 	 * Initializes module.
 	 * @param array $moduleConfig Module config array.
 	 */
-	static function Init(array $moduleConfig) { }
+	static function Init(array $moduleConfig)
+	{
+		self::$locksDir = empty($moduleConfig['locks_dir']) ? sys_get_temp_dir() : $moduleConfig['locks_dir'];
+		self::$debugMode = $moduleConfig['debug'];
+
+		LockFile::Init($moduleConfig['lock']);
+	}
 
 	/**
 	 * Returns array of required modules.
 	 * @return array Required modules.
 	 */
-	static function GetRequiredModules(): array
+	static function GetRequiredModules() : array
 	{
-		return ['MySql'];
-	}
-
-	public final function __construct($id, $name, $sleepTime)
-	{
-		$this->daemonName	= $name;
-		$this->id			= $id;
-		$this->sleepTime	= (int)$sleepTime;
+		return [];
 	}
 
 	/**
-	 * Запускает демон на выполнение
-	 * @param	string	$daemonName	Имя демона
-	 * @throws	OperationException
+	 * Creates new daemon.
 	 */
-	public static function Start($daemonName)
+	public function __construct()
 	{
-		self::ExecDaemonCommand($daemonName, 'start');
+		$this->name = array_pop(explode('\\', get_class()));
+		$this->lockFile = new LockFile($this->name);
 	}
 
 	/**
-	 * Останавливает выполнения демона после окончания текущей итерации
-	 * @param	string	$daemonName	Имя демона
-	 * @throws	OperationException
+	 * Starts the daemon.
+	 * @return int PID.
+	 * @throws \Exception If method fails to fork the process.
+	 * @throws \RuntimeException If daemon is already running.
 	 */
-	public static function Stop($daemonName)
+	public final function Start() : int
 	{
-		self::ExecDaemonCommand($daemonName, 'stop');
-	}
-
-	/**
-	 * Сообщает всем демонам выполнить остановку
-	 */
-	public static function StopAll()
-	{
-		Database::Query("UPDATE `" . DAEMONS . "` SET `need_stop` = '1' WHERE `status` != '0';");
-	}
-
-	public static function Kill($daemonName)
-	{
-		self::ExecDaemonCommand($daemonName, 'kill');
-	}
-
-	public static function Restart($daemonName)
-	{
-		self::ExecDaemonCommand($daemonName, 'restart');
-	}
-
-	public static function Status($daemonName)
-	{
-		return (bool)self::ExecDaemonCommand($daemonName, 'status');
-	}
-
-	/**
-	 * Передает демону команду на выполнение
-	 * @param string $daemonName Имя демона
-	 * @param string $command Команда
-	 * @return mixed
-	 * @throws OperationException
-	 */
-	private static function ExecDaemonCommand($daemonName, $command)
-	{
-		exec('php -f ' . ROOT_PATH . "daemon.php $daemonName $command", $result);
-		
-		Log::Debug("Результат выполнения команды демона:" . print_r($result, true));
-
-		list($code, $data) = $result;
-
-		switch($code)
+		if($this->IsRunning())
 		{
-			case DAEMON_OP_SUCCESS:
-				break;
-			case DAEMON_NO_FILE:
-				throw new OperationException(OperationError::NO_DAEMON_FILE);
-			case DAEMON_START_PROCESS_ERROR:
-				throw new OperationException(OperationError::DAEMON_PROCESS_ERROR);
-			case DAEMON_UNDEFINED_COMMAND:
-				throw new OperationException(OperationError::WRONG_DAEMON_COMMAND);
-			case DAEMON_NO_NAME:
-				throw new OperationException(OperationError::NO_DAEMON_NAME);
-			case DAEMON_NO_IN_DB:
-				throw new OperationException(OperationError::NO_DAEMON);
-			case DAEMON_ALREADY_LAUNCHED:
-				throw new OperationException(OperationError::DAEMON_ALREADY_RUN);
-			case DAEMON_NO_CLASS:
-				throw new OperationException(OperationError::NO_DAEMON_CLASS);
-			case DAEMON_NOT_RUNNING:
-				throw new OperationException(OperationError::DAEMON_NOT_RUN);
-			default:
-				throw new OperationException(OperationError::UNKNOWN_DAEMON_CODE);
+			throw new \RuntimeException('Daemon is already running.');
 		}
 
-		return $data;
+		$pid = pcntl_fork();
+
+		if($pid < 0) // Error
+		{
+			throw new \Exception("Cannot fork parent process.");
+		}
+		else if($pid > 0) // Parent process
+		{
+			return $pid;
+		}
+
+		// Child process
+
+		// Unbinds child process from the parent process
+		posix_setsid();
+
+		// Close standart streams
+		fclose(STDIN);
+		fclose(STDOUT);
+		fclose(STDERR);
+
+		if(self::$debugMode)
+		{
+			/** @noinspection PhpUnusedLocalVariableInspection */
+			$STDERR = fopen(sys_get_temp_dir() . "/daemon-{$this->name}-err.txt", 'ab');
+			/** @noinspection PhpUnusedLocalVariableInspection */
+			$STDOUT = fopen(sys_get_temp_dir() . "/daemon-{$this->name}-out.txt", 'ab');
+		}
+		else
+		{
+			/** @noinspection PhpUnusedLocalVariableInspection */
+			$STDERR	= fopen('/dev/null', 'ab');
+			/** @noinspection PhpUnusedLocalVariableInspection */
+			$STDOUT	= fopen('/dev/null', 'ab');
+		}
+
+		// Remove execution time limit
+		set_time_limit(0);
+
+		// Changes execution directory for possibility to start daemons from the removable storage
+		chdir('/');
+
+		$signals = [
+			SIGTERM, SIGINT, SIGUSR1, SIGHUP, SIGCHLD,
+			SIGUSR2, SIGCONT, SIGQUIT, SIGILL, SIGTRAP,
+			SIGABRT, SIGIOT, SIGBUS, SIGFPE, SIGSEGV,
+			SIGPIPE, SIGALRM, SIGCONT, SIGTSTP, SIGTTIN,
+			SIGTTOU, SIGURG, SIGXCPU, SIGXFSZ, SIGVTALRM,
+			SIGPROF, SIGWINCH, SIGIO, SIGSYS, SIGBABY
+		];
+
+		// Register signals
+		foreach(array_unique($signals) as $signal)
+		{
+			pcntl_signal($signal, [$this, 'SignalReceived']);
+		}
+
+		$this->lockFile->Create($pid);
+		$this->Run();
+
+		return -1;
 	}
 
 	/**
-	 * Запускает бесконечный цикл демона.
+	 * Stops the daemon.
+	 * Sends SIGTERM signal to the daemon process.
+	 * @throws \RuntimeException If daemon is not running.
 	 */
-	public final function Run()
+	public final function Stop()
 	{
-		Log::Debug("Запуск бесконечного цикла.");
-		Log::Save();
+		if(!$this->IsRunning())
+		{
+			throw new \RuntimeException('Daemon is not running');
+		}
 
-		$this->Prepare();
+		posix_kill($this->lockFile->GetPid(), SIGTERM);
+	}
+
+	/**
+	 * Kills the daemon.
+	 * Sends SIGKILL signal to the daemon process.
+	 * @throws \RuntimeException If daemon is not running.
+	 */
+	public final function Kill()
+	{
+		if(!$this->IsRunning())
+		{
+			throw new \RuntimeException('Daemon is not running');
+		}
+
+		posix_kill($this->lockFile->GetPid(), SIGKILL);
+	}
+
+	/**
+	 * Restarts the daemon.
+	 * Sends SIGUSR1 signal (binded to restart) to the daemon process.
+	 * @throws \RuntimeException If daemon is not running.
+	 */
+	public final function Restart()
+	{
+		if(!$this->IsRunning())
+		{
+			throw new \RuntimeException('Daemon is not running');
+		}
+
+		posix_kill($this->lockFile->GetPid(), SIGUSR1);
+	}
+
+	/**
+	 * @return bool True, if daemon is running.
+	 */
+	public final function IsRunning() : bool
+	{
+		if(!$this->lockFile->Exists())
+		{
+			return false;
+		}
+
+		exec('ps -p ' . $this->lockFile->GetPid(), $out);
+		return count($out) === 2; // If process is running, command 'ps -p' return two lines
+	}
+
+	/**
+	 * Runs infinite loop.
+	 */
+	private function Run()
+	{
+		$this->OnStart();
 
 		while(true)
 		{
-			//Узнаем нужно-ли завершить выполнение
-			$this->stop = (bool)Database::GetCell("SELECT `need_stop` FROM `" . DAEMONS . "` WHERE `id` = '{$this->id}' LIMIT 1;");
-
-			//Если нужно завершить выполнение
 			if($this->stop)
 			{
-				Log::Debug("А вот и моя остановочка!");
-				Log::Save();
-				
-				//Пишем в базу что процесс завершен и более не требуется отметка для завершения
-				Database::Query("UPDATE `" . DAEMONS . "` SET `pid` = '-1', `need_stop` = '0', `status` = '" . DAEMON_DISABLED . "' WHERE `id` = '$this->id' LIMIT 1;");
-				
-				//Прерываем бесконнечный цикл
 				break;
 			}
 
-			//Обновляем статус на "работает"
-			Database::Query("UPDATE `" . DAEMONS . "` SET `status` = '" . DAEMON_WORKING . "' WHERE `id` = '{$this->id}' LIMIT 1;");
-
-			//Выполняем работу для этой итерации цикла
+			$this->OnIterationBegin();
 			$this->Iteration();
+			$this->OnIterationEnd();
 
-			//Обновляем статус на "в ожидании"
-			Database::Query("UPDATE `" . DAEMONS . "` SET `status` = '" . DAEMON_WAITING . "' WHERE `id` = '{$this->id}' LIMIT 1;");
+			sleep($this->GetSleepTime());
 
-			Log::Info("Жду {$this->sleepTime} секунд.");
+			// Calls the handlers for the waiting signals
+			pcntl_signal_dispatch();
+		}
 
-			//Сохраняем логи, созданные во время выполнения итерации демона
-			Log::Save();
+		$this->OnStop();
 
-			//Ждем указанное в параметрах кол-во секунд и переходим на следующую итерацию
-			sleep($this->sleepTime);
+		exit(0);
+	}
+
+	/**
+	 * Signals receiver.
+	 * @param int $signo Number of the signal.
+	 * @param mixed $signinfo Info of the signal (empty if system does not supports signal info).
+	 */
+	private function SignalReceived(int $signo, $signinfo)
+	{
+		$this->OnSignal($signo, $signinfo);
+
+		switch($signo)
+		{
+			case SIGHUP: // Stop
+			case SIGINT:
+			case SIGTERM:
+				$this->stop = true;
+				$this->lockFile->Remove();
+			case SIGUSR1: // Restart
+				(new static())->Start();
+				break;
 		}
 	}
 
 	/**
-	 * Действия, которые выполняет демон за итерацию бесконечного цикла.
+	 * @return int The daemon sleep time between iterations.
+	 */
+	protected abstract function GetSleepTime() : int;
+
+	/**
+	 * Iteration of the infinite loop.
 	 */
 	protected abstract function Iteration();
 
 	/**
-	 * Подготовка демона перед работой.
-	 *
-	 * Метод для переопределения.
+	 * Called on daemon start.
 	 */
-	protected function Prepare() {}
+	protected function OnStart() { }
+
+	/**
+	 * Called on daemon stop.
+	 */
+	protected function OnStop() { }
+
+	/**
+	 * Called before iteration begin.
+	 */
+	protected function OnIterationBegin() { }
+
+	/**
+	 * Called after iteration.
+	 */
+	protected function OnIterationEnd() { }
+
+	/**
+	 * Called when a signal is received.
+	 * @param int $signo Number of the signal.
+	 * @param mixed $signinfo Info of the signal (empty if system does not supports signal info).
+	 */
+	protected function OnSignal(int $signo, $signinfo) { }
 }
