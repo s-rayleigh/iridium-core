@@ -83,8 +83,6 @@ require 'core/http/filter/class.DefaultFilter.php';
 require 'core/http/class.HTTP.php';
 require 'core/class.Operation.php';
 
-
-//TODO: перенести вверх
 use core\http\HTTP;
 use core\http\filter\ValueType;
 
