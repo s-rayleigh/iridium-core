@@ -85,7 +85,17 @@ abstract class Page extends RestrictedAccessHandler implements IModule
 
 	protected final function Process()
 	{
-		echo $this->ProcessPage($this->GetTemplateName(), $this->vars);
+		$this->Display($this->ProcessPage($this->GetTemplateName(), $this->vars));
+	}
+
+	/**
+	 * Display page to the user.
+	 * Can be overriden to display page content in another format.
+	 * @param string $pageContent Content of the page.
+	 */
+	protected function Display(string $pageContent)
+	{
+		echo $pageContent;
 	}
 
 	/**

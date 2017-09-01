@@ -145,7 +145,7 @@ abstract class FullPage extends Page
 		}
 	}
 
-	protected function ProcessPage(string $template, array $vars): string
+	protected final function ProcessPage(string $template, array $vars): string
 	{
 		$generatedPage = TemplateProcessor::ProcessTemplate($template, $vars);
 		$pageData = '<script>pageData=' . json_encode($this->jsonVars) . '</script>';
