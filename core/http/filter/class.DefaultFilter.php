@@ -222,7 +222,7 @@ final class DefaultFilter implements IFilter
 		{
 			if($options & FilterOption::REQUIRED)
 			{
-				throw new InputFilterException($inputName, $filterType, $filterInput, $options, "Value is required by input filter.", ErrorCode::VALUE_REQUIRED);
+				throw new InputFilterException($filterType, $inputName, $filterInput, $options, "Value is required by input filter.", ErrorCode::VALUE_REQUIRED);
 			}
 			else
 			{
@@ -236,7 +236,7 @@ final class DefaultFilter implements IFilter
 		}
 		catch(ValueFilterException $e)
 		{
-			throw new InputFilterException($inputName, $filterType, $filterInput, $options, "Exception is thrown while filtering value.", ErrorCode::VALUE_FILTER, $e);
+			throw new InputFilterException($filterType, $inputName, $filterInput, $options, "Exception is thrown while filtering value.", ErrorCode::VALUE_FILTER, $e);
 		}
 	}
 }
