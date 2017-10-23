@@ -20,7 +20,7 @@ final class QueryDispatcher
 		$this->queryTypes[] = $queryType;
 	}
 
-	public function Dispatch(string $queryTypeId, string $rawRoute)
+	public function Dispatch(string $queryTypeId, string $rawRoute, $data = null)
 	{
 		foreach($this->queryTypes as $qt)
 		{
@@ -55,6 +55,6 @@ final class QueryDispatcher
 			throw new DispatcherException("Handler class must be subclass of the \core\dispacher\Handler class.\nRoute: $rawRoute");
 		}
 
-		(new $route->fullClass)->Execute($route);
+		(new $route->fullClass)->Execute($route, $data);
 	}
 }

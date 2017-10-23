@@ -17,6 +17,11 @@ abstract class Handler
 	private $routeData;
 
 	/**
+	 * @var mixed Data for the query.
+	 */
+	private $queryData;
+
+	/**
 	 * Prepare to processing.
 	 * Execution order: 1.
 	 */
@@ -51,12 +56,22 @@ abstract class Handler
 	}
 
 	/**
+	 * @return mixed|null Data of the query.
+	 */
+	protected function GetQueryData()
+	{
+		return $this->queryData;
+	}
+
+	/**
 	 * Executes handler.
 	 * @param RouteData $routeData Route data of the handler.
+	 * @param mixed $queryData Data of the query.
 	 */
-	public final function Execute(RouteData $routeData)
+	public final function Execute(RouteData $routeData, $queryData = null)
 	{
 		$this->routeData = $routeData;
+		$this->queryData = $queryData;
 
 		$this->Prepare();
 		$this->Preprocess();
