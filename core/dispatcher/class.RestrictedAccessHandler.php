@@ -41,7 +41,7 @@ abstract class RestrictedAccessHandler extends Handler
 
 	protected function Require(Restriction $restriction)
 	{
-		if(!$this->preprocessExecuted)
+		if($this->preprocessExecuted)
 		{
 			throw new \Exception('Require method must be called before Preprocess stage.');
 		}
