@@ -84,7 +84,7 @@ abstract class Daemon implements IModule
 	 */
 	public function __construct()
 	{
-		$this->name = array_pop(explode('\\', get_class()));
+		$this->name = explode('\\', get_class())[0];
 		$this->lockFile = new LockFile($this->name);
 	}
 
@@ -141,7 +141,7 @@ abstract class Daemon implements IModule
 		set_time_limit(0);
 
 		// Changes execution directory for possibility to start daemons from the removable storage
-		chdir('/');
+		chdir('/home/');
 
 		$signals = [
 			SIGTERM, SIGINT, SIGUSR1, SIGHUP, SIGCHLD,
@@ -219,6 +219,11 @@ abstract class Daemon implements IModule
 			return false;
 		}
 
+		if($this->lockFile->GetPid() <= 0)
+		{
+			return false;
+		}
+
 		exec('ps -p ' . $this->lockFile->GetPid(), $out);
 		return count($out) === 2; // If process is running, command 'ps -p' return two lines
 	}
@@ -241,6 +246,7 @@ abstract class Daemon implements IModule
 			$this->Iteration();
 			$this->OnIterationEnd();
 
+			// Can be interrupted by the signals
 			sleep($this->GetSleepTime());
 
 			// Calls the handlers for the waiting signals
@@ -266,9 +272,18 @@ abstract class Daemon implements IModule
 			case SIGHUP: // Stop
 			case SIGINT:
 			case SIGTERM:
-				$this->stop = true;
-				$this->lockFile->Remove();
+				if(!$this->stop)
+				{
+					$this->stop = true;
+					$this->lockFile->Remove();
+				}
+				break;
 			case SIGUSR1: // Restart
+				if(!$this->stop)
+				{
+					$this->stop = true;
+					$this->lockFile->Remove();
+				}
 				(new static())->Start();
 				break;
 		}
