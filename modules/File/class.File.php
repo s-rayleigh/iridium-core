@@ -36,9 +36,9 @@ use core\module\IModule;
 use core\Session;
 
 /**
- * Файл.
- * @package core\file
- * @author rayleigh <rayleigh@protonmail.ch>
+ * File.
+ * TODO: rewrite
+ * @package modules\File
  */
 class File implements IModule
 {
