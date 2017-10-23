@@ -110,3 +110,4 @@ abstract class Page extends RestrictedAccessHandler implements IModule
 
 require 'class.FullPage.php';
 require 'class.PartPage.php';
+require 'class.AjaxPartPage.php';

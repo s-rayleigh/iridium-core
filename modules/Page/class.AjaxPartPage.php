@@ -49,7 +49,8 @@ abstract class AjaxPartPage extends PartPage
 			[
 				'content' => $pageContent,
 				'title' => $this->title,
-				'timestamp' => TIMESTAMP
+				'timestamp' => TIMESTAMP,
+				'data' => $this->data
 			]
 		);
 	}
