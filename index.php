@@ -44,12 +44,10 @@ Log::Init();
 
 require 'core/class.ErrorCode.php';
 
-require 'core/exceptions/class.NoticeableException.php';
 require 'core/exceptions/class.OperationException.php';
-require 'core/exceptions/class.UploadException.php';
 require 'core/exceptions/class.AccessException.php';
 require 'core/exceptions/class.DispatcherException.php';
-require 'core/exceptions/class.SidePanelException.php';
+require 'core/exceptions/class.RestrictionException.php';
 
 require 'core/route/class.RouteData.php';
 require 'core/route/class.RouteBuilder.php';
