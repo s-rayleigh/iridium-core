@@ -59,6 +59,7 @@ class Session
 			$_SESSION['created'] = true;
 		}
 
+		$_SESSION['from_last_access'] = isset($_SESSION['last_access']) ? TIMESTAMP - $_SESSION['last_access'] : 0;
 		$_SESSION['last_access'] = TIMESTAMP;
 	}
 
@@ -156,6 +157,14 @@ class Session
 	public function GetSessionUserAgent() : string
 	{
 		return $_SESSION['user_agent'];
+	}
+
+	/**
+	 * @return int Time in seconds from previous access to the current.
+	 */
+	public function GetTimeFromLastAccess() : int
+	{
+		return $_SESSION['from_last_access'];
 	}
 
 	/**
