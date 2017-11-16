@@ -55,6 +55,7 @@ final class QueryDispatcher
 			throw new DispatcherException("Handler class must be subclass of the \core\dispacher\Handler class.\nRoute: $rawRoute");
 		}
 
+		$queryType->CallBeforeDispatch($route);
 		(new $route->fullClass)->Execute($route, $data);
 	}
 }
