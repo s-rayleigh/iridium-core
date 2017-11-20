@@ -84,7 +84,8 @@ abstract class Daemon implements IModule
 	 */
 	public function __construct()
 	{
-		$this->name = explode('\\', get_class())[0];
+		$expl = explode('\\', get_called_class());
+		$this->name = end($expl);
 		$this->lockFile = new LockFile($this->name);
 	}
 
@@ -109,6 +110,7 @@ abstract class Daemon implements IModule
 		}
 		else if($pid > 0) // Parent process
 		{
+			$this->lockFile->Create($pid);
 			return $pid;
 		}
 
@@ -158,7 +160,6 @@ abstract class Daemon implements IModule
 			pcntl_signal($signal, [$this, 'SignalReceived']);
 		}
 
-		$this->lockFile->Create($pid);
 		$this->Run();
 
 		return -1;
