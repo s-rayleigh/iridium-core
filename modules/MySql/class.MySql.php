@@ -49,7 +49,11 @@ final class MySql implements IModule
 	public static function Init(array $moduleConfig)
 	{
 		self::$parameters = $moduleConfig;
-		self::Connect();
+
+		if(self::$parameters['autoconnect'])
+		{
+			self::Connect();
+		}
 	}
 
 	/**
@@ -70,8 +74,13 @@ final class MySql implements IModule
 	 * Connects to the database.
 	 * @throws Exception
 	 */
-	private static function Connect()
+	public static function Connect()
 	{
+		if(!empty(self::$connection))
+		{
+			self::Close();
+		}
+
 		self::$connection = new mysqli(
 			(self::$parameters['pool'] ? 'p:' : '') . self::$parameters['host'],
 			self::$parameters['user'],

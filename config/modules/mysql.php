@@ -23,10 +23,11 @@
 
 return
 [
-	'host' => 'localhost',	// MySql server host
-	'user' => 'root',		// Database user
-	'pass' => '',			// User password
-	'name' => 'iridium',	// Database name
-	'pool' => false,		// Use connection pool?
-	'char' => 'utf8'		// Connection character set
+	'host'			=> 'localhost',	// MySql server host
+	'user'			=> 'root',		// Database user
+	'pass'			=> '',			// User password
+	'name'			=> 'iridium',	// Database name
+	'pool'			=> false,		// Use connection pool?
+	'char'			=> 'utf8',		// Connection character set
+	'autoconnect'	=> true			// Automatically connect on initialization
 ];
