@@ -73,6 +73,14 @@ final class HTTP
 	}
 
 	/**
+	 * @return bool True, if the request is made through the https protocol.
+	 */
+	public static function IsHTTPS()
+	{
+		return !(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off');
+	}
+
+	/**
 	 * Sends response in JSON format.
 	 * @param mixed $data Data that will be encoded in the json format.
 	 * @param int $code Response code.
@@ -98,7 +106,7 @@ final class HTTP
 
 	public static function Redirect($url, $local = true, $code = 302)
 	{
-		header('Location: ' . ($local ? (HTTPS ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/' . $url : $url), true, $code);
+		header('Location: ' . ($local ? (self::IsHTTPS() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/' . $url : $url), true, $code);
 	}
 
 	/**
