@@ -81,6 +81,14 @@ final class HTTP
 	}
 
 	/**
+	 * @return string Url of the current host.
+	 */
+	public static function GetHost()
+	{
+		return (self::IsHTTPS() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'];
+	}
+
+	/**
 	 * Sends response in JSON format.
 	 * @param mixed $data Data that will be encoded in the json format.
 	 * @param int $code Response code.
