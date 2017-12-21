@@ -102,6 +102,7 @@ final class MySql implements IModule
 	public static function Close()
 	{
 		self::$connection->close();
+		self::$connection = null;
 	}
 
 	/**
