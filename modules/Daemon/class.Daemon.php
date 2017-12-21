@@ -119,10 +119,23 @@ abstract class Daemon implements IModule
 		// Unbinds child process from the parent process
 		posix_setsid();
 
-		// Close standart streams
-		fclose(STDIN);
-		fclose(STDOUT);
-		fclose(STDERR);
+		// Close standart streams if they open.
+		// Streams can be already closed if daemon restart command called.
+
+		if(is_resource(STDIN))
+		{
+			fclose(STDIN);
+		}
+
+		if(is_resource(STDOUT))
+		{
+			fclose(STDOUT);
+		}
+
+		if(is_resource(STDERR))
+		{
+			fclose(STDERR);
+		}
 
 		if(self::$debugMode)
 		{
