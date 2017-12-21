@@ -262,9 +262,9 @@ abstract class Daemon implements IModule
 	/**
 	 * Signals receiver.
 	 * @param int $signo Number of the signal.
-	 * @param mixed $signinfo Info of the signal (empty if system does not supports signal info).
+	 * @param mixed $signinfo Info of the signal (empty if system does not supports signal info or null if the php version lower than 7.1).
 	 */
-	private function SignalReceived(int $signo, $signinfo)
+	private function SignalReceived(int $signo, $signinfo = null)
 	{
 		$this->OnSignal($signo, $signinfo);
 
@@ -323,7 +323,7 @@ abstract class Daemon implements IModule
 	/**
 	 * Called when a signal is received.
 	 * @param int $signo Number of the signal.
-	 * @param mixed $signinfo Info of the signal (empty if system does not supports signal info).
+	 * @param mixed $signinfo Info of the signal (empty if system does not supports signal info or null if the php version lower than 7.1).
 	 */
-	protected function OnSignal(int $signo, $signinfo) { }
+	protected function OnSignal(int $signo, $signinfo = null) { }
 }
