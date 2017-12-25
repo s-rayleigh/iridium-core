@@ -88,10 +88,16 @@ abstract class FullPage extends Page
 	 * Includes CSS file at the beginning of the list to the page.
 	 * Extension must be omitted.
 	 * @param string $file CSS file name.
+	 * @param string $version Version of the file. Change to update the browser cache.
 	 */
-	public final function IncludeFirstCss(string $file)
+	public final function IncludeFirstCss(string $file, string $version = '')
 	{
 		$path = self::$moduleConfig['css_path'] . $file . '.css';
+
+		if(!empty($version))
+		{
+			$path .= '?v=' . $version;
+		}
 
 		if(in_array($path, $this->css))
 		{
@@ -105,10 +111,16 @@ abstract class FullPage extends Page
 	 * Includes JS file to the page.
 	 * Extension must be omitted.
 	 * @param string $file JS file name.
+	 * @param string $version Version of the file. Change to update the browser cache.
 	 */
-	protected final function IncludeJs(string $file)
+	protected final function IncludeJs(string $file, string $version = '')
 	{
 		$name = self::$moduleConfig['js_path'] . $file . '.js';
+
+		if(!empty($version))
+		{
+			$name .= '?v=' . $version;
+		}
 
 		if(in_array($name, $this->js))
 		{
