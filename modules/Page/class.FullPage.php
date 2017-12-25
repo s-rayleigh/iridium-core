@@ -73,14 +73,22 @@ abstract class FullPage extends Page
 	 * Includes CSS file to the page.
 	 * Extension must be omitted.
 	 * @param string $file CSS file name.
+	 * @param string $version Version of the file. Change to update the browser cache.
 	 */
-	public final function IncludeCss(string $file)
+	public final function IncludeCss(string $file, string $version = '')
 	{
 		$name = self::$moduleConfig['css_path'] . $file . '.css';
+
+		if(!empty($version))
+		{
+			$name .= '?v=' . $version;
+		}
+
 		if(in_array($name, $this->css))
 		{
 			return;
 		}
+
 		$this->css[] = $name;
 	}
 
