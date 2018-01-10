@@ -27,8 +27,11 @@ return
 [
 	// Lock file parameters
 	'lock' => [
+
 		// Path to the directory for the lock files.
 		// If empty, php tmp directory will be used.
+		// In case of using /tmp as php tmp directory and if you want to control daemon process from multiple users,
+		// make sure that you have disabled temp directory isolation in the systemd settings
 		// If directory does not exist, it will be created
 		'path' => '',
 
