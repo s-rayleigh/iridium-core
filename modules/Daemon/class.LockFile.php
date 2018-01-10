@@ -32,6 +32,11 @@ namespace modules\Daemon;
 final class LockFile
 {
 	/**
+	 * Access mode of the file.
+	 */
+	const MODE = 0664;
+
+	/**
 	 * @var string Path to the lock files directory.
 	 */
 	private static $dir;
@@ -71,7 +76,7 @@ final class LockFile
 
 		if(!is_dir(self::$dir))
 		{
-			if(!mkdir(self::$dir, 0600, true))
+			if(!mkdir(self::$dir, self::MODE, true))
 			{
 				throw new \InvalidArgumentException('Parameter "path" in daemon module parameters shoud contain correct path to the lock files directory.');
 			}
@@ -89,7 +94,7 @@ final class LockFile
 			throw new \RuntimeException("Cannot create lock file ({$this->path}) for the daemon.");
 		}
 
-		if(!chmod($this->path, 0600))
+		if(!chmod($this->path, self::MODE))
 		{
 			throw new \RuntimeException("Cannot chage rights of the daemon lock file ({$this->path}).");
 		}
