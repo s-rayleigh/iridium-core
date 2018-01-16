@@ -18,4 +18,12 @@ class RestrictionException extends \Exception
 		$this->restriction = $restriction;
 		parent::__construct($restriction->GetFailedCheckMessage());
 	}
+
+	/**
+	 * @return Restriction Restriction of this exception.
+	 */
+	public function GetRestriction() : Restriction
+	{
+		return $this->restriction;
+	}
 }
