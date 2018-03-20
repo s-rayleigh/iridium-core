@@ -33,30 +33,30 @@ abstract class ContentType
 	/**
 	 * Plain text.
 	 */
-	public const TEXT = 0;
+	const TEXT = 0;
 
 	/**
 	 * Urlencoded format.
 	 */
-	public const URLENCODED = 1;
+	const URLENCODED = 1;
 
 	/**
 	 * JSON format.
 	 */
-	public const JSON = 2;
+	const JSON = 2;
 
 	/**
 	 * XML format.
 	 */
-	public const XML = 3;
+	const XML = 3;
 
 	/**
 	 * Binary.
 	 */
-	public const BINARY = 4;
+	const BINARY = 4;
 
 	/**
 	 * HTML format.
 	 */
-	public const HTML = 5;
+	const HTML = 5;
 }

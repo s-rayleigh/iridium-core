@@ -11,7 +11,7 @@ class RouteBuilder
 	/**
 	 * Separator for the components of raw route.
 	 */
-	public const RAW_ROUTE_SEPARATOR = '.';
+	const RAW_ROUTE_SEPARATOR = '.';
 
 	/**
 	 * @var string Route raw prefix.

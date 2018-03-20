@@ -33,10 +33,10 @@ abstract class Method
 	/**
 	 * POST.
 	 */
-	public const POST = 'POST';
+	const POST = 'POST';
 
 	/**
 	 * GET.
 	 */
-	public const GET = 'GET';
+	const GET = 'GET';
 }

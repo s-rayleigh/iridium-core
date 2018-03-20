@@ -29,15 +29,15 @@ abstract class ErrorCode
 	/**
 	 * Value required error code.
 	 */
-	public const VALUE_REQUIRED = 0;
+	const VALUE_REQUIRED = 0;
 
 	/**
 	 * Wrong type error code.
 	 */
-	public const WRONG_TYPE = 1;
+	const WRONG_TYPE = 1;
 
 	/**
 	 * Filter value error code.
 	 */
-	public const VALUE_FILTER = 2;
+	const VALUE_FILTER = 2;
 }
