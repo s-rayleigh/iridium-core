@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * Path
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,33 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core;
+
+/**
+ * Path tools.
+ * @package Iridium\Core
+ */
+final class Path
+{
+//	private $separator;
+//
+//	public function __construct($separator = DIRECTORY_SEPARATOR)
+//	{
+//		$this->separator = $separator;
+//	}
+//
+//	public function Combine(string ...$paths)
+//	{
+//
+//	}
+
+	public static function Join(string $paths) : string
+	{
+
+	}
+
+	public static function Normalize(string $path) : string
+	{
+
+	}
+}

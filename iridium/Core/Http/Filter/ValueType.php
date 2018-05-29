@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * Value types for the filtration.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,47 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Http\Filter;
+
+/**
+ * Value type for the filtration.
+ * @package Iridium\Core\Http\Filter
+ */
+final class ValueType
+{
+	/**
+	 * Signed integer number.
+	 */
+	const INT = 0;
+
+	/**
+	 * Unsigned integer number.
+	 */
+	const UINT = 1;
+
+	/**
+	 * Signed float number.
+	 */
+	const FLOAT = 2;
+
+	/**
+	 * Unsigned float number.
+	 * Yeah, I know it's weird...
+	 */
+	const UFLOAT = 3;
+
+	/**
+	 * String.
+	 */
+	const STRING = 4;
+
+	/**
+	 * Array.
+	 */
+	const ARR = 5;
+
+	/**
+	 * Boolean.
+	 */
+	const BOOL = 6;
+}

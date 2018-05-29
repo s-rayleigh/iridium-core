@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * IModule interface.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,23 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Module;
+
+/**
+ * Interface for the module main file.
+ * @package Iridium\Core\Module
+ */
+interface IModule
+{
+	/**
+	 * Initializes module.
+	 * @param array $moduleConfig Module config array.
+	 */
+	static function Init(array $moduleConfig);
+
+	/**
+	 * Should return an array of required modules.
+	 * @return array Required modules.
+	 */
+	static function GetRequiredModules() : array;
+}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * Restriction.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,19 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Restriction;
+
+abstract class Restriction
+{
+	public function __construct() { }
+
+	public abstract function Check() : bool;
+
+	public abstract function GetFailedCheckMessage() : string;
+
+	public abstract function GetCode() : string;
+
+	public function FailedCheckAction() { }
+
+	public function SuccessCheckAction() { }
+}

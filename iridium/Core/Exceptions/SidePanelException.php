@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * Side panel exception.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,17 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Exceptions;
+
+/**
+ * Side panel exception.
+ * @package Iridium\Core\Exceptions
+ * @deprecated Will be removed in future versions.
+ */
+class SidePanelException extends \Exception
+{
+	public function __construct($message)
+	{
+		parent::__construct($message);
+	}
+}

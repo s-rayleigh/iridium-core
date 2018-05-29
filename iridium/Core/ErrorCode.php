@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * Contains error codes.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,26 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core;
+
+/**
+ * Error code.
+ * @package Iridium\Core
+ */
+abstract class ErrorCode
+{
+	/**
+	 * Value required error code.
+	 */
+	const VALUE_REQUIRED = 0;
+
+	/**
+	 * Wrong type error code.
+	 */
+	const WRONG_TYPE = 1;
+
+	/**
+	 * Filter value error code.
+	 */
+	const VALUE_FILTER = 2;
+}

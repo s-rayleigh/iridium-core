@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * Restricted access handler.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,39 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Dispatcher;
+
+use Iridium\Core\Restriction\Restriction;
+use Iridium\Core\Restriction\RestrictionManager;
+
+/**
+ * Resctricted access handler.
+ * @package Iridium\Core\Dispatcher
+ */
+abstract class RestrictedAccessHandler extends Handler
+{
+	private $restrictionManager;
+
+	private $preprocessExecuted = false;
+
+	public function __construct()
+	{
+		$this->restrictionManager = new RestrictionManager;
+	}
+
+	protected function Require(Restriction $restriction)
+	{
+		if($this->preprocessExecuted)
+		{
+			throw new \Exception('Require method must be called before Preprocess stage.');
+		}
+
+		$this->restrictionManager->Require($restriction);
+	}
+
+	protected function Preprocess()
+	{
+		$this->preprocessExecuted = true;
+		$this->restrictionManager->CheckRequirements();
+	}
+}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * Restriction exception.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,36 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Exceptions;
+
+use Iridium\Core\Restriction\Restriction;
+
+/**
+ * Restriction exception.
+ * @package Iridium\Core\Exceptions
+ */
+class RestrictionException extends \Exception
+{
+	/**
+	 * @var Restriction Restriction.
+	 */
+	private $restriction;
+
+	/**
+	 * Creates new restriction exception.
+	 * @param Restriction $restriction Restriction.
+	 */
+	public function __construct(Restriction $restriction)
+	{
+		$this->restriction = $restriction;
+		parent::__construct($restriction->GetFailedCheckMessage());
+	}
+
+	/**
+	 * @return Restriction Restriction of this exception.
+	 */
+	public function GetRestriction() : Restriction
+	{
+		return $this->restriction;
+	}
+}

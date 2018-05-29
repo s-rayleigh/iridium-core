@@ -20,7 +20,7 @@
  * along with Iridium Core. If not, see <http://www.gnu.org/licenses/>.
  *
  * @author rayleigh <rayleigh@protonmail.com>
- * @copyright 2017 Vladislav Pashaiev
+ * @copyright 2018 Vladislav Pashaiev
  * @license LGPL-3.0+
  */
 
@@ -29,7 +29,7 @@ return
 	'TemplateProcessor',
 	'Page',					//Requires TemplateProcessor module
 //	'MySql',
-//	'Daemon',				//Requires MySql module
+	'Daemon',
 //	'File',					//Requires MySql module
 	'Cryptocurrency',
 ];

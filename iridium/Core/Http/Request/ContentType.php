@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * HTTP request content type.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,41 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Http\Request;
+
+/**
+ * Request content type.
+ * @package Iridium\Core\Http\Request
+ */
+abstract class ContentType
+{
+	/**
+	 * Plain text.
+	 */
+	const TEXT = 0;
+
+	/**
+	 * Urlencoded format.
+	 */
+	const URLENCODED = 1;
+
+	/**
+	 * JSON format.
+	 */
+	const JSON = 2;
+
+	/**
+	 * XML format.
+	 */
+	const XML = 3;
+
+	/**
+	 * Binary.
+	 */
+	const BINARY = 4;
+
+	/**
+	 * HTML format.
+	 */
+	const HTML = 5;
+}

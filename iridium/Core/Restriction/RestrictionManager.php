@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * Restriction manager.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,47 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Restriction;
+
+use Iridium\Core\Exceptions\RestrictionException;
+
+class RestrictionManager
+{
+	/**
+	 * @var Restriction[] List of the restrictions.
+	 */
+	private $restrictions = [];
+
+	public function __construct() { }
+
+	public function Require(Restriction $restriction)
+	{
+		if(empty($restriction))
+		{
+			throw new \InvalidArgumentException("Argument 'restriction' should not be null.");
+		}
+
+		$this->restrictions[] = $restriction;
+	}
+
+	public function ClearRequirements()
+	{
+		$this->restrictions = [];
+	}
+
+	public function CheckRequirements()
+	{
+		foreach($this->restrictions as $restr)
+		{
+			if($restr->Check())
+			{
+				$restr->SuccessCheckAction();
+			}
+			else
+			{
+				$restr->FailedCheckAction();
+				throw new RestrictionException($restr);
+			}
+		}
+	}
+}

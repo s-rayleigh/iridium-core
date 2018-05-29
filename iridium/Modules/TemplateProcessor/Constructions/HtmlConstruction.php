@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * HTML construction.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,24 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Modules\TemplateProcessor\Constructions;
+
+use Iridium\Modules\TemplateProcessor\Construction;
+
+class HtmlConstruction extends Construction
+{
+	public function __construct($content)
+	{
+		$this->content = $content;
+	}
+	
+	public function GetResultData($vars)
+	{
+		return $this->content;
+	}
+
+	public function ProcessContent($content)
+	{
+		$this->content = $content;
+	}
+}

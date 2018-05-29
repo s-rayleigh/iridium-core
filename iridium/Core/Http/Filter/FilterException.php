@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * Filter exception.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,22 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Http\Filter;
+
+/**
+ * Filter exception.
+ * @package Iridium\Core\Http\Filter
+ */
+class FilterException extends \Exception
+{
+	/**
+	 * Creates filter exception.
+	 * @param string $message Exception message.
+	 * @param int $code Exception code.
+	 * @param \Throwable|null $previous Previous exception.
+	 */
+	public function __construct(string $message = '', int $code = 0, \Throwable $previous = null)
+	{
+		parent::__construct($message, $code, $previous);
+	}
+}

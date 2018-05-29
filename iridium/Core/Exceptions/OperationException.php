@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * Operation exception.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,39 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Exceptions;
+
+use Iridium\Core\Dispatcher\Operation;
+
+/**
+ * Operation exception.
+ * @package Iridium\Core\Exceptions
+ */
+class OperationException extends \Exception
+{
+	/**
+	 * @var Operation Operation.
+	 */
+	private $operation;
+
+	/**
+	 * Creates new operation exception.
+	 * @param Operation $operation Operation.
+	 * @param string $message Message.
+	 * @param int $code Code.
+	 * @param \Throwable|null $previous Previous.
+	 */
+	public function __construct(Operation $operation, string $message = '', $code = 0, \Throwable $previous = null)
+	{
+		$this->operation = $operation;
+		parent::__construct($message, $code, $previous);
+	}
+
+	/**
+	 * @return Operation Operation.
+	 */
+	public function GetOperation() : Operation
+	{
+		return $this->operation;
+	}
+}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * Filter input types.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,31 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Http\Filter;
+
+/**
+ * Determines the superglobal array from which the input filter gets value.
+ * @package Iridium\Core\Http\Filter
+ */
+final class FilterInput
+{
+	/**
+	 * Value from $_GET.
+	 */
+	const GET = 0;
+
+	/**
+	 * Value from $_POST.
+	 */
+	const POST = 1;
+
+	/**
+	 * Value from $_COOKIE.
+	 */
+	const COOKIE = 2;
+
+	/**
+	 * Value from $_REQUEST ($_GET + $_POST + $_COOKIE).
+	 */
+	const REQUEST = 3;
+}

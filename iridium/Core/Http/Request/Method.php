@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * HTTP request method.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,21 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Http\Request;
+
+/**
+ * Request method.
+ * @package Iridium\Core\Http\Request
+ */
+abstract class Method
+{
+	/**
+	 * POST.
+	 */
+	const POST = 'POST';
+
+	/**
+	 * GET.
+	 */
+	const GET = 'GET';
+}

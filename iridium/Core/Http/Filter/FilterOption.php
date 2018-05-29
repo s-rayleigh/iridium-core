@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * Filter options.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,26 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Http\Filter;
+
+/**
+ * Filter options.
+ * @package Iridium\Core\Http\Filter
+ */
+final class FilterOption
+{
+	/**
+	 * Allow multibite string.
+	 */
+	const MULTIBITE = 0b00000001;
+
+	/**
+	 * Use strict mode.
+	 */
+	const STRICT = 0b00000010;
+
+	/**
+	 * A value is required.
+	 */
+	const REQUIRED = 0b00000100;
+}

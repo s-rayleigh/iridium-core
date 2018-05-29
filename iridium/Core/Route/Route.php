@@ -1,6 +1,6 @@
 <?php
 /**
- * Cryptocurrency module parameters.
+ * Route.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -21,10 +21,31 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'host' => '127.0.0.1',	// Node host
-	'port' => '9031',		// Node port
-	'user' => 'uniwallet',	// Username
-	'pass' => 'test'		// Password
-];
+namespace Iridium\Core\Route;
+
+/**
+ * Route data.
+ * @package Iridium\Core\Route
+ */
+final class Route
+{
+	/**
+	 * @var string Handler class name.
+	 */
+	public $class;
+
+	/**
+	 * @var string Handler full class name with namespace.
+	 */
+	public $fullClass;
+
+	/**
+	 * @var string Path to the file that contains handler class.
+	 */
+	public $filePath;
+
+	/**
+	 * @var array Components of the handler path.
+	 */
+	public $pathComponents;
+}
