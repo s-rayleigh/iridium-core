@@ -36,13 +36,13 @@ use Iridium\Core\Http\Request\Request;
 final class HTTP
 {
 	/**
-	 * @var IFilter
+	 * @var IFilter Filter for the values from user.
 	 */
 	private static $filter;
 
 	/**
-	 * Регистрирует переданный фильтр.
-	 * @param IFilter $filter
+	 * Registers passed filter.
+	 * @param IFilter $filter Filter to register.
 	 */
 	public static function RegisterFilter(IFilter $filter)
 	{
@@ -50,22 +50,21 @@ final class HTTP
 	}
 
 	/**
-	 * Возвращает зарегистрированный фильтр входных данных.
-	 * @return	IFilter	Зарегистрированный фильтр
+	 * @return IFilter Registered filter.
 	 */
-	public static function GetRegisteredFilter()
+	public static function GetRegisteredFilter(): IFilter
 	{
 		return self::$filter;
 	}
 
 	/**
-	 * Проверяет, зарегистрирован ли фильтр. Если нет, бросает Exception.
+	 * Checks that filter is registered. Throws 'Exception' if not.
+	 * @throws \Exception If filter is not registered.
 	 */
 	private static function CheckFilterRegistered()
 	{
 		if(!isset(self::$filter))
 		{
-			//throw new NoticeableException("Фильтр входных данных не был зарегистрирован!", "Ошибка HTTP", LogLevel::FATAL);
 			throw new \Exception('Input filter should be registered.');
 		}
 	}
@@ -73,7 +72,7 @@ final class HTTP
 	/**
 	 * @return bool True, if the request is made through the https protocol.
 	 */
-	public static function IsHTTPS()
+	public static function IsHTTPS(): bool
 	{
 		return !(empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] === 'off');
 	}
@@ -81,7 +80,7 @@ final class HTTP
 	/**
 	 * @return string Url of the current host.
 	 */
-	public static function GetHost()
+	public static function GetHost(): string
 	{
 		return (self::IsHTTPS() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'];
 	}
@@ -92,7 +91,7 @@ final class HTTP
 	 * @param int $code Response code.
 	 * @param string $charset Character set of the response.
 	 */
-	public static function SendJsonResponse($data, $code = 200, $charset = 'utf-8')
+	public static function SendJsonResponse($data, int $code = 200, string $charset = 'utf-8')
 	{
 		header('Content-Type: application/json; charset=' . $charset, true, $code);
 		echo json_encode($data);
@@ -104,87 +103,93 @@ final class HTTP
 	 * @param int $code Response code.
 	 * @param string $charset Character set of the response.
 	 */
-	public static function SendXmlResponse($data, $code = 200, $charset = 'utf-8')
+	public static function SendXmlResponse(string $data, int $code = 200, string $charset = 'utf-8')
 	{
 		header('Content-Type: application/xml; charset=' . $charset, true, $code);
 		echo $data;
 	}
 
-	public static function Redirect($url, $local = true, $code = 302)
+	/**
+	 * Redirect to the passed url by using the 'Location' HTTP header.
+	 * @param string $url
+	 * @param bool $local
+	 * @param int $code
+	 */
+	public static function Redirect(string $url, bool $local = true, int $code = 302)
 	{
 		header('Location: ' . ($local ? (self::IsHTTPS() ? 'https://' : 'http://') . $_SERVER['HTTP_HOST'] . '/' . $url : $url), true, $code);
 	}
 
 	/**
-	 * Возвращает отфильтрованное значение переменной из суперглобального массива $_POST.
-	 * @param	string	$variableName	Имя переменной
-	 * @param	int		$filterType		Тип фильтра (FilterType)
-	 * @param	mixed	$default		Значение по умолчанию
-	 * @param	int		$options		Дополнительные опции фильтра (FilterOption)
-	 * @return	mixed					Отфильтрованное значение или значение по умолчанию
-	 * @throws	NoticeableException
+	 * Returns filtered value from the '$_POST' superglobal array.
+	 * @param string $key Key of the value in '$_POST' superblobal array.
+	 * @param int $type Type of the value (@see ValueType).
+	 * @param null $default Default value. Used if no value with passed key in '$_POST'.
+	 * @param int $options Filter options (@see FilterOption).
+	 * @return mixed Value from '$_POST' or default value.
+	 * @throws Filter\InputFilterException
 	 */
-	public static function GetPost($variableName, $filterType, $default = null, $options = 0)
+	public static function GetPost(string $key, int $type, $default = null, int $options = 0)
 	{
 		self::CheckFilterRegistered();
-		return self::$filter->FilterInput(FilterInput::POST, $variableName, $filterType, $default, $options);
+		return self::$filter->FilterInput(FilterInput::POST, $key, $type, $default, $options);
 	}
 
 	/**
-	 * Возвращает отфильтрованное значение переменной из суперглобального массива $_GET.
-	 * @param	string	$variableName	Имя переменной
-	 * @param	int		$filterType		Тип фильтра (FilterType)
-	 * @param	mixed	$default		Значение по умолчанию
-	 * @param	int		$options		Дополнительные опции фильтра (FilterOption)
-	 * @return	mixed					Отфильтрованное значение или значение по умолчанию
-	 * @throws	NoticeableException
+	 * Returns filtered value from the '$_GET' superglobal array.
+	 * @param string $key Key of the value in '$_GET' superblobal array.
+	 * @param int $type Type of the value (@see ValueType).
+	 * @param null $default Default value. Used if no value with passed key in '$_GET'.
+	 * @param int $options Filter options (@see FilterOption).
+	 * @return mixed Value from '$_GET' or default value.
+	 * @throws Filter\InputFilterException
 	 */
-	public static function GetGet($variableName, $filterType, $default = null, $options = 0)
+	public static function GetGet(string $key, int $type, $default = null, int $options = 0)
 	{
 		self::CheckFilterRegistered();
-		return self::$filter->FilterInput(FilterInput::GET, $variableName, $filterType, $default, $options);
+		return self::$filter->FilterInput(FilterInput::GET, $key, $type, $default, $options);
 	}
 
 	/**
-	 * Возвращает отфильтрованное значение переменной из суперглобального массива $_COOKIE.
-	 * @param	string	$variableName	Имя переменной
-	 * @param	int		$filterType		Тип фильтра (FilterType)
-	 * @param	mixed	$default		Значение по умолчанию
-	 * @param	int		$options		Дополнительные опции фильтра (FilterOption)
-	 * @return	mixed					Отфильтрованное значение или значение по умолчанию
-	 * @throws	NoticeableException
+	 * Returns filtered value from the '$_COOKIE' superglobal array.
+	 * @param string $key Key of the value in '$_COOKIE' superblobal array.
+	 * @param int $type Type of the value (@see ValueType).
+	 * @param null $default Default value. Used if no value with passed key in '$_COOKIE'.
+	 * @param int $options Filter options (@see FilterOption).
+	 * @return mixed Value from '$_COOKIE' or default value.
+	 * @throws Filter\InputFilterException
 	 */
-	public static function GetCookie($variableName, $filterType, $default = null, $options = 0)
+	public static function GetCookie(string $key, int $type, $default = null, int $options = 0)
 	{
 		self::CheckFilterRegistered();
-		return self::$filter->FilterInput(FilterInput::COOKIE, $variableName, $filterType, $default, $options);
+		return self::$filter->FilterInput(FilterInput::COOKIE, $key, $type, $default, $options);
 	}
 
 	/**
-	 * Возвращает отфильтрованное значение переменной из суперглобального массива $_REQUEST.
-	 * @param	string	$variableName	Имя переменной
-	 * @param	int		$filterType		Тип фильтра (FilterType)
-	 * @param	mixed	$default		Значение по умолчанию
-	 * @param	int		$options		Дополнительные опции фильтра (FilterOption)
-	 * @return	mixed					Отфильтрованное значение или значение по умолчанию
-	 * @throws	NoticeableException
+	 * Returns filtered value from the '$_REQUEST' superglobal array.
+	 * @param string $key Key of the value in '$_REQUEST' superblobal array.
+	 * @param int $type Type of the value (@see ValueType).
+	 * @param null $default Default value. Used if no value with passed key in '$_REQUEST'.
+	 * @param int $options Filter options (@see FilterOption).
+	 * @return mixed Value from '$_REQUEST' or default value.
+	 * @throws Filter\InputFilterException
 	 */
-	public static function GetRequest($variableName, $filterType, $default = null, $options = 0)
+	public static function GetRequest(string $key, int $type, $default = null, int $options = 0)
 	{
 		self::CheckFilterRegistered();
-		return self::$filter->FilterInput(FilterInput::REQUEST, $variableName, $filterType, $default, $options);
+		return self::$filter->FilterInput(FilterInput::REQUEST, $key, $type, $default, $options);
 	}
 
 	/**
-	 * Устанавливает значение cookie с заданным именем и временем.
-	 * @param	string	$name	Имя cookie
-	 * @param	mixed	$value	Значение cookie
-	 * @param	int		$time	Время жизни cookie
-	 * @param	string	$path	Путь, по которому будет доступна cookie
+	 * Sets the cookie value.
+	 * @param string $name Name of the cookie.
+	 * @param string $value Value of the cookie.
+	 * @param int $expire The time the cookie expires. If 0 or ommitted, the cookie expires at the end of the session (when the browser closes).
+	 * @param string $path The path on the server in which the cookie will available on.
 	 */
-	public static function SetCookie($name, $value, $time, $path = '/')
+	public static function SetCookie(string $name, string $value = '', int $expire = 0, string $path = '/')
 	{
-		setcookie($name, $value, $time, $path);
+		setcookie($name, $value, $expire, $path);
 	}
 
 	/**
