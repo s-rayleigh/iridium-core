@@ -223,29 +223,4 @@ final class HTTP
 	{
 		return (new Request($url))->SetContentType(ContentType::JSON)->Send($data);
 	}
-
-	/**
-	 * Sends request with specified url, header, method and content.
-	 * @param string $url URL.
-	 * @param string $header Request header.
-	 * @param string $method Request method (POST or GET).
-	 * @param string $contentText Text of the request content.
-	 * @return bool|string Response text or false if error has occured.
-	 * @deprecated
-	 */
-	public static function SendRequest(string $url, string $header, string $method, string $contentText = '')
-	{
-		$options = [
-			'http' => [
-				'header'  => $header,
-				'method'  => $method,
-				'content' => $contentText
-			]
-		];
-
-		$context = stream_context_create($options);
-		$result  = file_get_contents($url, false, $context);
-
-		return $result;
-	}
 }
