@@ -37,6 +37,10 @@ require_once 'Core/Exceptions/AccessException.php';
 require_once 'Core/Exceptions/DispatcherException.php';
 require_once 'Core/Exceptions/RestrictionException.php';
 
+// Tools
+require_once 'Core/Tools/Tools.php';
+require_once 'Core/Tools/ArrayTools.php';
+
 // Log
 require_once 'Core/Log/LogLevel.php';
 require_once 'Core/Log/Log.php';
