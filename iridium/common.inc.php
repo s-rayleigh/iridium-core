@@ -40,6 +40,7 @@ require_once 'Core/Exceptions/RestrictionException.php';
 // Tools
 require_once 'Core/Tools/Tools.php';
 require_once 'Core/Tools/ArrayTools.php';
+require_once 'Core/Tools/StringTools.php';
 
 // Log
 require_once 'Core/Log/LogLevel.php';
