@@ -44,5 +44,25 @@ final class StringTools extends Tools
 		return str_replace(self::SNAKE_CASE_SEPARATOR, '', lcfirst(ucwords($str, self::SNAKE_CASE_SEPARATOR)));
 	}
 
+	/**
+	 * Detects is $haystack starts with $needle.
+	 * @param string $haystack The string to search in.
+	 * @param string $needle The string to search at beginning of the $haystack.
+	 * @return bool True, if $haystack starts with $needle.
+	 */
+	public static function StartsWith(string $haystack, string $needle): bool
+	{
+		return $needle === '' || strrpos($haystack, $needle, -strlen($haystack)) !== false;
+	}
 
+	/**
+	 * Detects is $haystack ends with $needle.
+	 * @param string $haystack The string to search in.
+	 * @param string $needle The string to search at ending of the $haystack.
+	 * @return bool True, if $haystack ends with $needle.
+	 */
+	public static function EndsWith(string $haystack, string $needle): bool
+	{
+		return $needle === '' || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== false);
+	}
 }

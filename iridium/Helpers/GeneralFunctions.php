@@ -144,31 +144,6 @@ function GetValidRegexpr($expr, $flags = '')
 }
 
 /**
- * Определяет, начинается ли строка $haystack с подстроки $needle
- * @param	string	$haystack
- * @param	string	$needle
- * @return	bool
- * @todo Move to class.
- */
-function StartsWith($haystack, $needle)
-{
-	//strrpos вместо strpos для выполнения меньшего числа операций
-	return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== false;
-}
-
-/**
- * Определяет, заканчивается ли строка $haystack подстрокой $needle
- * @param	string	$haystack
- * @param	string	$needle
- * @return	bool
- * @todo Move to class.
- */
-function EndsWith($haystack, $needle)
-{
-	return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== false);
-}
-
-/**
  * Ограничивает число заданным промежутком
  * @param	int	$number	Число
  * @param	int	$min	Минимум промежутка
