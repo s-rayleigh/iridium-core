@@ -1,9 +1,6 @@
 <?php
 /**
- * Modules config.
- * Uncomment module that you need to include into your project.
- * Do not change order.
- *
+ * Dictionary, filtered by keywords.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -24,13 +21,25 @@
  * @license LGPL-3.0+
  */
 
-return
-[
-	'Lang',
-	'TemplateProcessor',
-	'Page',					//Requires TemplateProcessor module
-//	'MySql',
-	'Daemon',
-//	'File',					//Requires MySql module
-	'Cryptocurrency',
-];
+namespace Iridium\Modules\Lang;
+
+/**
+ * Dictionary, filtered by keywords.
+ * @package Iridium\Modules\Lang
+ */
+class FilteredDictionary extends Dictionary
+{
+	private $keywords;
+
+	public function __construct(Dictionary $dictionary, array $keywords)
+	{
+		parent::__construct($dictionary->code, $dictionary->name, $dictionary->group);
+		$this->fallback = $dictionary->fallback;
+		$this->keywords = $keywords;
+	}
+
+	protected function IsGroupSuitable(Group $group): bool
+	{
+		return $group->HasKeywords($this->keywords);
+	}
+}

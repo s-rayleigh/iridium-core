@@ -1,0 +1,34 @@
+# Language example file
+
+> name: English
+
+ok: Ok
+cancel: Cancel
+help: Help
+
+[group:auth]
+	login: Login
+	username: Username
+	email: E-mail
+	pass: Password
+
+	[group:login_grp]
+		> keywords: test, something, keyword
+		lost_pass: Forgot your password?
+		sign_in: Sign in
+	[end:login_grp]
+
+	[group:register]
+		register: Sign up
+		username_placeholder: Enter username...
+		username_tooltip: Only letters of the English alphabet.
+        email_placeholder: Enter {auth.email}...
+        email_tooltip: Enter your real e-mail.
+        pass_placeholder: Enter password...
+        pass_tooltip: Must not be less than 4 characters.
+	[end:register]
+
+	> include test
+[end:auth]
+
+test: Test string

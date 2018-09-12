@@ -1,9 +1,6 @@
 <?php
 /**
- * Modules config.
- * Uncomment module that you need to include into your project.
- * Do not change order.
- *
+ * Language module parameters.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -26,11 +23,21 @@
 
 return
 [
-	'Lang',
-	'TemplateProcessor',
-	'Page',					//Requires TemplateProcessor module
-//	'MySql',
-	'Daemon',
-//	'File',					//Requires MySql module
-	'Cryptocurrency',
+	// List of the codes of languages to load
+	'languages' => ['en', 'ru'],
+
+	// Code of the fallback language
+	'fallback' => 'en',
+
+	// Code of the default language
+	'default' => 'en',
+
+	// Cache enabled
+	'cache' => true,
+
+	// Path to the language files
+	'lang_path' => 'app/Languages',
+
+	// Path to the language cache
+	'cache_path' => 'storage/cache/lang'
 ];

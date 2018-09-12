@@ -1,0 +1,12 @@
+
+> name: Русский
+> fallback: en
+
+ok: Ок
+cancel: Отмена
+help: Помощь
+
+[group:auth]
+	> keywords: test
+	login: Логин
+[end:auth]
