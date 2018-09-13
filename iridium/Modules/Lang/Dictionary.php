@@ -284,13 +284,14 @@ class Dictionary
 	/**
 	 * @return array List of the all languages starting from this and and ending the deepest fallback language.
 	 */
-	private function GetFallbackStack(): array
+	protected function GetFallbackStack(): array
 	{
 		$result = [];
 		$f      = $this;
 
 		while($f !== null)
 		{
+			if(in_array($f, $result, true)) { break; }
 			$result[] = $f;
 			$f        = $f->fallback;
 		}
