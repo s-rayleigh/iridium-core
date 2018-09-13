@@ -100,6 +100,13 @@ final class Lang implements IModule
 		foreach(self::$languages as $lang)
 		{
 			$fallbackCode = $lang->GetFallbackCode();
+
+			if(empty($fallbackCode) && !empty(self::$conf->fallback))
+			{
+				// Set fallback code to the default fallback language if it defined in the config of the module
+				$fallbackCode = self::$conf->fallback;
+			}
+
 			if(!empty($fallbackCode))
 			{
 				if($fallbackCode === $lang->GetCode())

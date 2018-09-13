@@ -26,10 +26,12 @@ return
 	// List of the codes of languages to load
 	'languages' => ['en', 'ru'],
 
-	// Code of the fallback language
+	// Code of the default fallback language
+	// Leave it empty if you not need to set the default fallback language
 	'fallback' => 'en',
 
-	// Code of the default language
+	// Code of the default active language
+	// Leave it empty if you not need to set the default language
 	'default' => 'en',
 
 	// Cache enabled
