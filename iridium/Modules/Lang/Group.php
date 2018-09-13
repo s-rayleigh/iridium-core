@@ -36,7 +36,7 @@ class Group
 	private $name;
 
 	/**
-	 * @var array Keywords.
+	 * @var string[] Keywords.
 	 */
 	private $keywords;
 
@@ -89,7 +89,7 @@ class Group
 
 	/**
 	 * Adds multiple keywords to this group.
-	 * @param array $keywords Keywords to be added.
+	 * @param string[] $keywords Keywords to be added.
 	 */
 	public function AddKeywords(array $keywords)
 	{
@@ -106,7 +106,7 @@ class Group
 	}
 
 	/**
-	 * @return array Keywords of this group.
+	 * @return string[] Keywords of this group.
 	 */
 	public function GetKeywords(): array
 	{
@@ -125,7 +125,7 @@ class Group
 
 	/**
 	 * Determines if group has the specified keywords.
-	 * @param array $keywords Keywords.
+	 * @param string[] $keywords Keywords.
 	 * @return bool True if group has all of the specified keywords.
 	 */
 	public function HasKeywords(array $keywords): bool
@@ -154,7 +154,7 @@ class Group
 	}
 
 	/**
-	 * @return array Phrases.
+	 * @return string[] Phrases.
 	 */
 	public function GetPhrases(): array
 	{
