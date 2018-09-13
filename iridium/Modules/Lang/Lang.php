@@ -101,7 +101,7 @@ final class Lang implements IModule
 		{
 			$fallbackCode = $lang->GetFallbackCode();
 
-			if(empty($fallbackCode) && !empty(self::$conf->fallback))
+			if(empty($fallbackCode) && !empty(self::$conf->fallback) && self::$conf->fallback !== $lang->GetCode())
 			{
 				// Set fallback code to the default fallback language if it defined in the config of the module
 				$fallbackCode = self::$conf->fallback;
@@ -111,7 +111,7 @@ final class Lang implements IModule
 			{
 				if($fallbackCode === $lang->GetCode())
 				{
-					throw new \Exception("Language with code {$lang->GetCode()} cannot have fallback code that equals to it's code.");
+					throw new \Exception("Language with code '{$lang->GetCode()}' cannot have fallback code that equals to it's code.");
 				}
 
 				foreach(self::$languages as $l)
@@ -121,6 +121,20 @@ final class Lang implements IModule
 						$lang->SetFallbackLang($l);
 					}
 				}
+			}
+		}
+
+		if(!empty(self::$conf->default))
+		{
+			// Try to set the default active language if it defined in the config of the module
+
+			try
+			{
+				self::SetActive(self::$conf->default);
+			}
+			catch(\Exception $e)
+			{
+				throw new \Exception("Cannot set the default active language.", 0, $e);
 			}
 		}
 	}
