@@ -1,3 +1,5 @@
+## 0.2-indev
+- Added initial version of the language module.
 ## 0.1.1-indev
 - HTTP class:
 	- Added type hints for the methods.
