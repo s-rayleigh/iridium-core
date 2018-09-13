@@ -26,7 +26,7 @@
  * Iridium Core version.
  * Format: <major version>.<minor version>[.<patch>][-alpha|beta|indev]
  */
-define('IRIDIUM_VERSION', '0.1-indev');
+define('IRIDIUM_VERSION', '0.2-indev');
 
 //===============================- PATHS -===============================
 
