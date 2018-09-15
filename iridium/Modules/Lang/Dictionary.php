@@ -30,7 +30,7 @@ use Iridium\Core\Tools\StringTools;
  * Dictionary that contains language phrases.
  * @package Iridium\Modules\Lang
  */
-class Dictionary
+class Dictionary implements \Serializable
 {
 	/**
 	 * Separator for the phrase path.
@@ -305,4 +305,24 @@ class Dictionary
 	 * @return bool True if need to look for the phrases in specified group.
 	 */
 	protected function IsGroupSuitable(Group $group): bool { return true; }
+
+	public function serialize()
+	{
+		return serialize([
+			$this->code,
+			$this->fallbackCode,
+			$this->name,
+			$this->group
+		]);
+	}
+
+	public function unserialize($serialized)
+	{
+		list(
+			$this->code,
+			$this->fallbackCode,
+			$this->name,
+			$this->group
+		) = unserialize($serialized);
+	}
 }
