@@ -34,12 +34,13 @@ return
 	// Leave it empty if you not need to set the default language
 	'default' => 'en',
 
-	// Cache enabled
+	// Caching enabled
 	'cache' => true,
 
 	// Path to the language files
 	'lang_path' => 'app/Languages',
 
 	// Path to the language cache
+	// Program should have write access to this directory if caching is enabled
 	'cache_path' => 'storage/cache/lang'
 ];

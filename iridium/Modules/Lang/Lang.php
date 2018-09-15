@@ -30,6 +30,7 @@ require 'GroupParseData.php';
 require 'Group.php';
 require 'Dictionary.php';
 require 'FilteredDictionary.php';
+require 'Cache.php';
 
 /**
  * Language module.
@@ -55,7 +56,7 @@ final class Lang implements IModule
 	/**
 	 * @var \stdClass Configuration of the module.
 	 */
-	private static $conf;
+	public static $conf;
 
 	/**
 	 * @var Dictionary Active language.
@@ -68,6 +69,11 @@ final class Lang implements IModule
 	private static $languages;
 
 	/**
+	 * @var int Timestamp of the loaded cache creation.
+	 */
+	private static $cacheTimestamp;
+
+	/**
 	 * Initializes the language module.
 	 * @param array $conf Config of the module.
 	 * @throws \Exception If some error is occurred.
@@ -76,24 +82,44 @@ final class Lang implements IModule
 	{
 		self::$conf = (object)$conf;
 
-		if(self::$conf->cache)
+		if(self::$conf->cache && Cache::IsExists())
 		{
-			// TODO: cache
-		}
+			// Load languages from cache
 
-		self::$languages = [];
-
-		// Load languages
-		foreach(self::$conf->languages as $langCode)
-		{
-			$path = self::GetLangPath($langCode);
-
-			if($path === null)
+			try
 			{
-				throw new \Exception("Cannot find language with code '{$langCode}'.");
+				$cache                = Cache::Load();
+				self::$languages      = $cache->GetDictionaries();
+				self::$cacheTimestamp = $cache->GetTimestamp();
+			}
+			catch(\Exception $e)
+			{
+				throw new \Exception("Canot load languages cache.", 1, $e);
+			}
+		}
+		else
+		{
+			// Load languages from file
+
+			self::$languages = [];
+
+			foreach(self::$conf->languages as $langCode)
+			{
+				$path = self::GetLangPath($langCode);
+
+				if($path === null)
+				{
+					throw new \Exception("Cannot find language with code '{$langCode}'.");
+				}
+
+				self::$languages[] = self::ReadLanguage($langCode, $path);
 			}
 
-			self::$languages[] = self::ReadLanguage($langCode, $path);
+			// Save loaded languages to the cache
+			if(self::$conf->cache && !Cache::IsExists())
+			{
+				(new Cache(self::$languages))->Save();
+			}
 		}
 
 		// Set fallbacks
@@ -228,6 +254,14 @@ final class Lang implements IModule
 		}
 
 		throw new \Exception("Language with specified code was not found.");
+	}
+
+	/**
+	 * @return int Timestamp of the loaded cache or zero if cache is not loaded.
+	 */
+	public static function GetCacheTimestamp(): int
+	{
+		return empty(self::$cacheTimestamp) ? 0 : self::$cacheTimestamp;
 	}
 
 	/**
