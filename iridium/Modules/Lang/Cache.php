@@ -45,8 +45,15 @@ class Cache implements \Serializable
 	 */
 	private $dictionaries;
 
+	/**
+	 * @var bool True, if cache is loaded.
+	 */
 	private $loaded;
 
+	/**
+	 * Creates new cache.
+	 * @param Dictionary[] $dictionaries Dictionaries of the languages.
+	 */
 	public function __construct(array $dictionaries)
 	{
 		$this->dictionaries = $dictionaries;
@@ -74,16 +81,27 @@ class Cache implements \Serializable
 		$this->loaded = true;
 	}
 
+	/**
+	 * @return bool True, if cache file is exists.
+	 */
 	public static function IsExists(): bool
 	{
 		return file_exists(self::GetCachePath());
 	}
 
+	/**
+	 * @return bool Removes cache file.
+	 */
 	public static function Clear(): bool
 	{
 		return @unlink(self::GetCachePath());
 	}
 
+	/**
+	 * Loads cache from file.
+	 * @return Cache Loaded cache.
+	 * @throws \Exception If error is occurred while reading the file or deserialization process.
+	 */
 	public static function Load(): self
 	{
 		$content = @file_get_contents(self::GetCachePath());
@@ -101,6 +119,10 @@ class Cache implements \Serializable
 		return $result;
 	}
 
+	/**
+	 * Saves cache to the file.
+	 * @throws \Exception
+	 */
 	public function Save()
 	{
 		$serialized = serialize($this);
@@ -130,6 +152,10 @@ class Cache implements \Serializable
 		}
 	}
 
+	/**
+	 * @return int Timestamp of the loaded cache creation.
+	 * @throws \Exception
+	 */
 	public function GetTimestamp(): int
 	{
 		if(!$this->loaded)
@@ -140,6 +166,10 @@ class Cache implements \Serializable
 		return $this->timestamp;
 	}
 
+	/**
+	 * @return Dictionary[] Dictionaries of the loaded cache.
+	 * @throws \Exception
+	 */
 	public function GetDictionaries(): array
 	{
 		if(!$this->loaded)
@@ -150,6 +180,9 @@ class Cache implements \Serializable
 		return $this->dictionaries;
 	}
 
+	/**
+	 * @return string Path to the cache file.
+	 */
 	private static function GetCachePath(): string
 	{
 		static $cachePath = null;
