@@ -286,7 +286,7 @@ final class Lang implements IModule
 		$parseData->SetPath($path);
 
 		$langParams = new \stdClass;
-		$mainGroup  = self::ProcessGroup($parseData, $langParams);
+		$mainGroup  = self::ParseGroup($parseData, $langParams);
 
 		if(empty($langParams->name))
 		{
@@ -310,7 +310,7 @@ final class Lang implements IModule
 	 * @return Group Data of the group.
 	 * @throws \Exception If error occured while processing the group.
 	 */
-	private static function ProcessGroup(GroupParseData $pd, \stdClass &$mainParams = null): Group
+	private static function ParseGroup(GroupParseData $pd, \stdClass &$mainParams = null): Group
 	{
 		// Flags
 		$newLine          = true;
@@ -465,7 +465,7 @@ final class Lang implements IModule
 
 								try
 								{
-									$incGroup = self::ProcessGroup($incParceData);
+									$incGroup = self::ParseGroup($incParceData);
 								}
 								catch(\Exception $e)
 								{
@@ -516,7 +516,7 @@ final class Lang implements IModule
 								$subgrouParseData = new GroupParseData(mb_substr($pd->GetContent(), $gi, $ri - $gi - 1));
 								$subgrouParseData->SetLine($groupLine);
 								$subgrouParseData->SetPath($pd->GetRelativePath());
-								$subgroup = self::ProcessGroup($subgrouParseData);
+								$subgroup = self::ParseGroup($subgrouParseData);
 							}
 							catch(\Exception $e)
 							{
