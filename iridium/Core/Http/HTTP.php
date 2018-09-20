@@ -227,4 +227,13 @@ final class HTTP
 	{
 		return (new Request($url))->SetContentType(ContentType::JSON)->Send($data);
 	}
+
+	/**
+	 * @return string Language code of the user preferred language or empty string.
+	 */
+	public static function GetUserLangCode(): string
+	{
+		if(empty($_SERVER['HTTP_ACCEPT_LANGUAGE']) || $_SERVER['HTTP_ACCEPT_LANGUAGE'] === '*') { return ''; }
+		return substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+	}
 }
