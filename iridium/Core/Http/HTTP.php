@@ -223,7 +223,7 @@ final class HTTP
 	 * @param mixed $data Data.
 	 * @return bool|string Response text or false if error has occured.
 	 */
-	public static function SendJsonRequest(string $url, mixed $data)
+	public static function SendJsonRequest(string $url, $data)
 	{
 		return (new Request($url))->SetContentType(ContentType::JSON)->Send($data);
 	}
