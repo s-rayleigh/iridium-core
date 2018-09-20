@@ -128,6 +128,7 @@ final class HTTP
 	 * @param int $options Filter options (@see FilterOption).
 	 * @return mixed Value from '$_POST' or default value.
 	 * @throws Filter\InputFilterException
+	 * @throws \Exception
 	 */
 	public static function GetPost(string $key, int $type, $default = null, int $options = 0)
 	{
@@ -143,6 +144,7 @@ final class HTTP
 	 * @param int $options Filter options (@see FilterOption).
 	 * @return mixed Value from '$_GET' or default value.
 	 * @throws Filter\InputFilterException
+	 * @throws \Exception
 	 */
 	public static function GetGet(string $key, int $type, $default = null, int $options = 0)
 	{
@@ -158,6 +160,7 @@ final class HTTP
 	 * @param int $options Filter options (@see FilterOption).
 	 * @return mixed Value from '$_COOKIE' or default value.
 	 * @throws Filter\InputFilterException
+	 * @throws \Exception
 	 */
 	public static function GetCookie(string $key, int $type, $default = null, int $options = 0)
 	{
@@ -173,6 +176,7 @@ final class HTTP
 	 * @param int $options Filter options (@see FilterOption).
 	 * @return mixed Value from '$_REQUEST' or default value.
 	 * @throws Filter\InputFilterException
+	 * @throws \Exception
 	 */
 	public static function GetRequest(string $key, int $type, $default = null, int $options = 0)
 	{
