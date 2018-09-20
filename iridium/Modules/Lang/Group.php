@@ -35,6 +35,8 @@ class Group
 	 */
 	private $name;
 
+	private $dir;
+
 	/**
 	 * @var string[] Keywords.
 	 */
@@ -77,6 +79,23 @@ class Group
 	public function SetName(string $name)
 	{
 		$this->name = $name;
+	}
+
+	/**
+	 * @return string Path to directory of the file of this group or empty string if this group is not file.
+	 */
+	public function GetDir(): string
+	{
+		return empty($this->dir) ? '' : $this->dir;
+	}
+
+	/**
+	 * Sets path to directory of the file of this group.
+	 * @param string $path Path to the directory.
+	 */
+	public function SetDir(string $path)
+	{
+		$this->dir = $path;
 	}
 
 	/**

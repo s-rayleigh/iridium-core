@@ -92,6 +92,14 @@ class Dictionary implements \Serializable
 	}
 
 	/**
+	 * @return Group Root group.
+	 */
+	public function GetRootGroup(): Group
+	{
+		return $this->group;
+	}
+
+	/**
 	 * Sets the code of the fallback language.
 	 * @param string $code Code of the fallback language.
 	 * @return Dictionary Self.

@@ -299,6 +299,15 @@ final class Lang implements IModule
 			$dict->SetFallbackCode($langParams->fallback);
 		}
 
+		try
+		{
+			self::ProcessInlineCommands($dict);
+		}
+		catch(\Exception $e)
+		{
+			throw new \Exception("Error occurred while processing inline commands for the language with code '{$code}'.", 3, $e);
+		}
+
 		return $dict;
 	}
 
@@ -340,6 +349,8 @@ final class Lang implements IModule
 			if(!empty($file)) { $result .= " in file '{$file}'"; }
 			return $result;
 		};
+
+		$group->SetDir($pd->GetDir());
 
 		// Iterate through symbols
 		for($i = 0; $i < $len; $i++)
@@ -781,6 +792,132 @@ final class Lang implements IModule
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Parses and processes inline commands.
+	 * @param Dictionary $dict Dictionary of the language.
+	 */
+	private static function ProcessInlineCommands(Dictionary $dict)
+	{
+		$prInlCmd = function(Group $group) use(&$prInlCmd, $dict)
+		{
+			foreach($group->GetPhrases() as $id => $phrase)
+			{
+				$len     = mb_strlen($phrase, self::ENCODING);
+				$command = false; // Command flag
+				$cmdBeg  = 0; // Command start index
+
+				for($i = 0; $i < $len; $i++)
+				{
+					$symb = mb_substr($phrase, $i, 1, self::ENCODING);
+
+					if($symb === '\\')
+					{
+						// Skip next
+						$i++;
+						continue;
+					}
+
+					if($symb === '{')
+					{
+						$command = true;
+						$cmdBeg  = $i;
+						continue;
+					}
+
+					if($command)
+					{
+						if($symb === '{')
+						{
+							throw new \Exception("Unexpected symbol '{' in the inline command construction. Expected symbol '}'.");
+						}
+
+						if($symb === '}')
+						{
+							$command  = false;
+							$cmdLen   = $i - $cmdBeg - 1;
+							$cmdText  = trim(mb_substr($phrase, $cmdBeg + 1, $cmdLen));
+							$cmdParts = explode(' ', $cmdText);
+							$partsLen = count($cmdParts);
+
+							if($partsLen === 1)
+							{
+								$path      = $cmdParts[0];
+								$subPhrase = $dict->FindPhrase($path);
+
+								if($subPhrase === null)
+								{
+									throw new \Exception("Cannot fild phrase with path '{$path}' specified in the inline command.'");
+								}
+
+								$phrase = substr_replace($phrase, $subPhrase, $cmdBeg, $cmdLen + 2);
+								$len    = mb_strlen($phrase, self::ENCODING);
+								$i      = $cmdBeg + mb_strlen($subPhrase, self::ENCODING);
+							}
+							else if($partsLen === 2)
+							{
+								$command = $cmdParts[0];
+								$value   = $cmdParts[1];
+
+
+								switch($command)
+								{
+									case 'include':
+										$grpPath = $group->GetDir();
+
+										$path = ROOT_PATH . DIRECTORY_SEPARATOR . self::$conf->lang_path . DIRECTORY_SEPARATOR;
+
+										if(!empty($grpPath))
+										{
+											$path .= $grpPath . DIRECTORY_SEPARATOR;
+										}
+
+										$path .= $value . '.' . self::PHRASE_FILE_EXT;
+
+										if(file_exists($path))
+										{
+											$fileContent = @file_get_contents($path);
+
+											if($fileContent === false)
+											{
+												throw new \Exception("Cannot read file of the phrase with path '{$path}'.");
+											}
+
+											$phrase = substr_replace($phrase, $fileContent, $cmdBeg, $cmdLen + 2);
+											$len    = mb_strlen($phrase, self::ENCODING);
+											$i      = $cmdBeg + mb_strlen($fileContent, self::ENCODING);
+										}
+										else
+										{
+											throw new \Exception("File of the phrase with path '{$path}' in not exists.");
+										}
+
+										break;
+									default:
+										throw new \Exception("Unknown inline command '{$command}'.");
+										break;
+								}
+							}
+							else
+							{
+								throw new \Exception("Unknown inline command.");
+							}
+						}
+
+					}
+				}
+
+				$group->AddPhrase($id, str_replace('\{', '{', $phrase));
+			}
+
+			foreach($group->GetSubgroups() as $subgroup)
+			{
+				$prInlCmd($subgroup);
+			}
+		};
+
+		$prInlCmd($dict->GetRootGroup());
 	}
 
 	/**

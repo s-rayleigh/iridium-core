@@ -22,13 +22,14 @@ help: Help
 		register: Sign up
 		username_placeholder: Enter username...
 		username_tooltip: Only letters of the English alphabet.
-        email_placeholder: Enter {auth.email}...
-        email_tooltip: Enter your real e-mail.
-        pass_placeholder: Enter password...
-        pass_tooltip: Must not be less than 4 characters.
+		email_placeholder: Enter {auth.email}...
+		email_tooltip: Enter your real {auth.email}.
+		pass_placeholder: Enter password...
+		pass_tooltip: Must not be less than 4 characters.
 	[end:register]
 
 	> include test
 [end:auth]
 
 test: Test string
+test_inc: included from file: {include long_text}
