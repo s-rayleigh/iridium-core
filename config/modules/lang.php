@@ -37,6 +37,12 @@ return
 	// Caching enabled
 	'cache' => true,
 
+	// Automatically detect user language based on the 'Accept-Language' HTTP header
+	'autodetect' => false,
+
+	// Store active language in the cookies and restore between requests
+	'use_cookies' => true,
+
 	// Path to the language files
 	'lang_path' => 'app/Languages',
 

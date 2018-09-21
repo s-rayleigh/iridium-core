@@ -24,6 +24,8 @@
 namespace Iridium\Modules\Lang;
 
 
+use Iridium\Core\Http\Filter\ValueType;
+use Iridium\Core\Http\HTTP;
 use Iridium\Core\Module\IModule;
 
 require 'GroupParseData.php';
@@ -52,6 +54,11 @@ final class Lang implements IModule
 	 * Multibyte encoding of the language files.
 	 */
 	const ENCODING = 'UTF-8';
+
+	/**
+	 * Name of the cookie in which active language code is stored.
+	 */
+	const COOKIE_NAME = 'lang';
 
 	/**
 	 * @var \stdClass Configuration of the module.
@@ -150,17 +157,30 @@ final class Lang implements IModule
 			}
 		}
 
-		if(!empty(self::$conf->default))
+		if(self::$conf->use_cookies)
 		{
-			// Try to set the default active language if it defined in the config of the module
+			$activeCode = HTTP::GetCookie(self::COOKIE_NAME, ValueType::STRING, '');
+		}
 
+		if(empty($activeCode) && self::$conf->autodetect)
+		{
+			$activeCode = HTTP::GetUserLangCode();
+		}
+
+		if(empty($activeCode) && !empty(self::$conf->default))
+		{
+			$activeCode = self::$conf->default;
+		}
+
+		if(!empty($activeCode) && self::IsLoaded($activeCode))
+		{
 			try
 			{
-				self::SetActive(self::$conf->default);
+				self::SetActive($activeCode);
 			}
 			catch(\Exception $e)
 			{
-				throw new \Exception("Cannot set the default active language.", 0, $e);
+				throw new \Exception("Cannot set the active language with code '{$activeCode}'.", 0, $e);
 			}
 		}
 	}
@@ -195,6 +215,24 @@ final class Lang implements IModule
 	}
 
 	/**
+	 * Returns true if language with specified code is loaded.
+	 * @param string $code Code of the language.
+	 * @return bool True if language with specified code is loaded.
+	 */
+	public static function IsLoaded(string $code): bool
+	{
+		foreach(self::$languages as $lang)
+		{
+			if($lang->GetCode() === $code)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Sets the active language by code.
 	 * @param string $code Code of the language that is needed to be setted as active.
 	 * @throws \Exception If language with the specified code is not found.
@@ -208,7 +246,13 @@ final class Lang implements IModule
 			if($lang->GetCode() === $code)
 			{
 				self::$active = $lang;
-				$exist = true;
+				$exist        = true;
+
+				if(self::$conf->use_cookies)
+				{
+					HTTP::SetCookie(self::COOKIE_NAME, $code);
+				}
+
 				break;
 			}
 		}
@@ -254,6 +298,14 @@ final class Lang implements IModule
 		}
 
 		throw new \Exception("Language with specified code was not found.");
+	}
+
+	/**
+	 * @return Dictionary[] Dinctionaries of the loaded languages.
+	 */
+	public static function GetDictionaries(): array
+	{
+		return self::$languages;
 	}
 
 	/**
