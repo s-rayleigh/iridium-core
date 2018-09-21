@@ -23,6 +23,7 @@
 
 namespace Iridium\Core\Http;
 
+use Iridium\Core\Http\Filter\DefaultFilter;
 use Iridium\Core\Http\Filter\FilterInput;
 use Iridium\Core\Http\Filter\IFilter;
 use Iridium\Core\Http\Request\ContentType;
@@ -58,15 +59,11 @@ final class HTTP
 	}
 
 	/**
-	 * Checks that filter is registered. Throws 'Exception' if not.
-	 * @throws \Exception If filter is not registered.
+	 * Checks is the filter is registered. If not, registers the default filter.
 	 */
 	private static function CheckFilterRegistered()
 	{
-		if(!isset(self::$filter))
-		{
-			throw new \Exception('Input filter should be registered.');
-		}
+		if(!isset(self::$filter)) { self::RegisterFilter(new DefaultFilter()); }
 	}
 
 	/**
