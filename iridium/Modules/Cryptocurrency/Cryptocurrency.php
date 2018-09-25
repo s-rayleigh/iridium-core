@@ -29,7 +29,7 @@ use Iridium\Core\Module\IModule;
 
 require_once 'CommandException.php';
 
-final class Cryptocurrency implements IModule
+class Cryptocurrency implements IModule
 {
 	private static $defaultHost;
 
