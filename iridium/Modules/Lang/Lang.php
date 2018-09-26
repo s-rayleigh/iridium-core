@@ -250,7 +250,8 @@ final class Lang implements IModule
 
 				if(self::$conf->use_cookies)
 				{
-					HTTP::SetCookie(self::COOKIE_NAME, $code);
+					HTTP::SetCookie(self::COOKIE_NAME, $code,
+						self::$conf->cookie_lifetime === 0 ? 0 : time() + self::$conf->cookie_lifetime);
 				}
 
 				break;

@@ -43,6 +43,9 @@ return
 	// Store active language in the cookies and restore between requests
 	'use_cookies' => true,
 
+	// Time that cookie lives. Set to 0 if cookie should be removed after the session ends
+	'cookie_lifetime' => 0,
+
 	// Path to the language files
 	'lang_path' => 'app/Languages',
 
