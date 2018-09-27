@@ -142,10 +142,11 @@ class Dictionary implements \Serializable
 	/**
 	 * Searches for phrase with specified path.
 	 * @param string $path Path to the phrase.
+	 * @param bool $fallback Look for the phrase in the fallback languages.
 	 * @return null|string Phrase or null if no phrase by the specified path.
 	 * @throws \Exception If the path is empty.
 	 */
-	public function FindPhrase(string $path)
+	public function FindPhrase(string $path, bool $fallback = true)
 	{
 		if(empty($path)) { throw new \Exception('Path should not be empty.'); }
 
@@ -156,16 +157,27 @@ class Dictionary implements \Serializable
 		if($group !== null)
 		{
 			$phrase = $group->GetPhrase($phraseId);
-			if($phrase !== null)
-			{
-				return $phrase;
-			}
+			if($phrase !== null) { return $phrase; }
 		}
 
-		// Search in the fallback language
-		if(!empty($this->fallback))
+		// Search in the fallback languages
+		if($fallback)
 		{
-			return $this->fallback->FindPhrase($path);
+			$first = true;
+
+			/** @var Dictionary $lang */
+			foreach($this->GetFallbackStack() as $lang)
+			{
+				// Skip the first language because it current
+				if($first)
+				{
+					$first = false;
+					continue;
+				}
+
+				$fph = $lang->FindPhrase($path, false);
+				if($fph !== null) { return $fph; }
+			}
 		}
 
 		return null;
