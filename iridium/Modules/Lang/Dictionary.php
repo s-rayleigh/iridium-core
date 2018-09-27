@@ -304,7 +304,7 @@ class Dictionary implements \Serializable
 			$f        = $f->fallback;
 		}
 
-		return array_reverse($result);
+		return $result;
 	}
 
 	/**
