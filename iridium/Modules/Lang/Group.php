@@ -169,6 +169,17 @@ class Group
 	public function GetPhrase(string $id)
 	{
 		if(array_key_exists($id, $this->phrases)) { return $this->phrases[$id]; }
+
+		foreach($this->sub as $sub)
+		{
+			// Search for the phrase in the child nameless groups
+			if($sub->IsNameless())
+			{
+				$subphr = $sub->GetPhrase($id);
+				if($subphr !== null) { return $subphr; }
+			}
+		}
+
 		return null;
 	}
 
