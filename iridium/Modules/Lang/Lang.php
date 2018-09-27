@@ -573,7 +573,7 @@ final class Lang implements IModule
 						if(empty($data->name)) { $namelessGrpCount--; }
 
 						// End of the current subgroup
-						if(empty($data->name) && empty($subgroupData->name) && $namelessGrpCount === 0 ||  !empty($data->name) && $subgroupData->name === $data->name)
+						if(empty($data->name) && empty($subgroupData->name) && $namelessGrpCount === 0 || !empty($data->name) && $subgroupData->name === $data->name)
 						{
 							try
 							{
