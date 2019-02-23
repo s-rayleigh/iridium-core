@@ -310,6 +310,14 @@ final class Lang implements IModule
 	}
 
 	/**
+	 * @return bool True if the cache is enabled.
+	 */
+	public static function IsCacheEnabled(): bool
+	{
+		return self::$conf->cache;
+	}
+
+	/**
 	 * @return int Timestamp of the loaded cache or zero if cache is not loaded.
 	 */
 	public static function GetCacheTimestamp(): int
