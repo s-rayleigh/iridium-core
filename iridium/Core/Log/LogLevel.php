@@ -23,22 +23,24 @@
 
 namespace Iridium\Core\Log;
 
-//Уровни логирования
+/**
+ * Logging levels.
+ * @package Iridium\Core\Log
+ */
 final class LogLevel
 {
-	const EVENT		= -1;	//Событие
-	const FATAL		= 0;	//Фатальная ошибка
-	const ERROR		= 1;	//Ошибка
-	const WARNING	= 2;	//Предупреждение
-	const INFO		= 3;	//Информационное сообщение
-	const DEBUG		= 4;	//Сообщение отладки
-	const DATABASE	= 5;	//Запрос к базе данных
-
-	//TODO: дописать описание и doc comments
+	const EVENT		= -1;
+	const FATAL		= 0;
+	const ERROR		= 1;
+	const WARNING	= 2;
+	const INFO		= 3;
+	const DEBUG		= 4;
+	const DATABASE	= 5;
 
 	/**
-	 * @param $level
-	 * @return string
+	 * Returns name of the logging level in string representation.
+	 * @param int $level Logging level.
+	 * @return string Name.
 	 */
 	public static function GetString($level)
 	{
@@ -59,7 +61,7 @@ final class LogLevel
 			case self::DATABASE:
 				return 'DATABASE';
 			default:
-				return ''; //TODO: заменить на Exception
+				return '';
 		}
 	}
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Log.
+ * Logging.
  * This file is part of Iridium Core project.
  *
  * Iridium Core is free software: you can redistribute it and/or modify
@@ -17,36 +17,39 @@
  * along with Iridium Core. If not, see <http://www.gnu.org/licenses/>.
  *
  * @author rayleigh <rayleigh@protonmail.com>
- * @copyright 2018 Vladislav Pashaiev
+ * @copyright 2019 Vladislav Pashaiev
  * @license LGPL-3.0+
  */
 
 namespace Iridium\Core\Log;
 
 /**
- * Класс логирования сообщений в файл.
+ * Class for the logging to the file.
  *
- * Перед использованием необходимо вызвать метод Log::Init().
+ * Before use, you must call {@see Log::Init}.
+ *
+ * @todo move to the separate module
  */
 final class Log
 {
 	/**
-	 * @var string Буфер для хранения логов до сохранения в файл.
+	 * @var string Buffer for storing logs before writing to a file.
 	 */
 	private static $buffer;
 
 	/**
-	 * @var bool
+	 * @var bool Is initialized.
 	 */
 	private static $initialized = false;
 
 	/**
-	 * @var string
+	 * @var string Prefix of the logs file name.
 	 */
 	private static $fileNamePrefix;
 
 	/**
-	 * @param string $prefix
+	 * Initializes the logging. Call this at the beginning of the execution.
+	 * @param string $prefix Prefix of the file name.
 	 */
 	public static function Init($prefix = '')
 	{
@@ -55,21 +58,13 @@ final class Log
 			return;
 		}
 
-		self::LogMessage('Инициализация логирования.', LogLevel::DEBUG, true);
-
 		self::$fileNamePrefix = $prefix;
 
-		//Если директория для файлов логов не создана
+		// Create directory if it does not exist
 		if(!file_exists(ROOT_PATH . LOG_FILES_PATH))
 		{
-			self::LogMessage('Папка для хранения логов не создана, создаем ее.', LogLevel::DEBUG, true);
-
-			//Создаем директорию
 			self::$initialized = mkdir(ROOT_PATH . LOG_FILES_PATH, 0777, true);
-
-			//При рекурсивном создании директроии не выставляет права. Ставим отдельно
 			chmod(ROOT_PATH . LOG_FILES_PATH, 0777);
-
 			return;
 		}
 
@@ -111,7 +106,6 @@ final class Log
 		self::LogMessage($message, LogLevel::EVENT);
 	}
 
-	//Создать сообщение логирования с указанным уровнем
 	public static function LogMessage($message, $level, $ignoreInitialization = false)
 	{
 		if($level > LOG_LEVEL || !($ignoreInitialization || self::$initialized))
@@ -122,33 +116,27 @@ final class Log
 		self::$buffer .= date('[d.m.Y H:i:s][') . LogLevel::GetString($level) . "]\n" . $message . "\n\n";
 	}
 
-	//Возвращает имя файла лога. Ротация по дням
 	private static function GetLogFileName() { return self::$fileNamePrefix . date('Y.m.d', time()) . '.log'; }
 
 	/**
-	 * Сохраняет логи из буфера в файл.
-	 * @param bool $clearBuffer Нужно-ли очистить буфер.
-	 * @return bool False, если не удалось сохранить логи в файл.
+	 * Saves log from buffer to the file.
+	 * @param bool $clearBuffer Clear buffer after saving.
+	 * @return bool True, if successfully saved.
 	 */
 	public static function Save($clearBuffer = true)
 	{
-		self::Debug('Сохранение логов из буфера в файл.');
-
 		$filePath = ROOT_PATH . LOG_FILES_PATH . self::GetLogFileName();
 
-		//Пишем данные буфера в файл
 		if(file_put_contents($filePath, self::$buffer, FILE_APPEND) === false)
 		{
 			return false;
 		}
 
-		//Если не выставлен полный режим доступа - выставляем
 		if((fileperms($filePath) & 0777) !== 0777)
 		{
 			chmod($filePath, 0777);
 		}
 
-		//Очищаем буфер
 		if($clearBuffer)
 		{
 			self::ClearBuffer();
@@ -158,7 +146,7 @@ final class Log
 	}
 
 	/**
-	 * Выполняет очистку буфера логов.
+	 * Clears the log buffer.
 	 */
 	public static function ClearBuffer()
 	{
