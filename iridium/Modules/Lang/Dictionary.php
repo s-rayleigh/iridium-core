@@ -210,7 +210,7 @@ class Dictionary implements \Serializable
 		};
 
 		/** @var Dictionary $lang */
-		foreach($this->GetFallbackStack() as $lang) { $convert($lang->group); }
+		foreach(array_reverse($this->GetFallbackStack()) as $lang) { $convert($lang->group); }
 		return $result;
 	}
 
