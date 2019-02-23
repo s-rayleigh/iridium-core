@@ -84,7 +84,7 @@ class ExpressionConstruction implements iConstruction
 				case '<=':
 				case '==':
 				case '!=':
-					continue;
+					break;
 
 				//Если элемент не входит в список допустимых сочетаний символов, значит это переменная или константа
 				default:
@@ -96,7 +96,7 @@ class ExpressionConstruction implements iConstruction
 
 					if(is_numeric($trimmedExpressionPart))
 					{
-						continue;
+						break;
 					}
 
 					$openCount = $exprPartLen - strlen($ld);
