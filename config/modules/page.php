@@ -22,16 +22,17 @@
  */
 
 // Do not remove any parameter, it might cause errors.
+// NOTE: All paths should be relative to the public directory
 return
 [
 	// Path to the javascript files
-	'js_path' => 'public/js/',
+	'js_path' => 'js/',
 
 	// Path to the css files
-	'css_path' => 'public/css/',
+	'css_path' => 'css/',
 
 	// Path to the images
-	'img_path' => 'public/images/',
+	'img_path' => 'img/',
 
 	// Google Analytics
 	'google_analytics' =>
