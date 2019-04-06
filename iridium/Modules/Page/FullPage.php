@@ -42,6 +42,11 @@ abstract class FullPage extends Page
 	private $jsonVars = [];
 
 	/**
+	 * @var array Variables for the page structure template.
+	 */
+	private $structVars = [];
+
+	/**
 	 * @var array Included CSS files.
 	 */
 	private $css = [];
@@ -67,6 +72,15 @@ abstract class FullPage extends Page
 	protected final function AssignJsData(array $vars)
 	{
 		$this->jsonVars += $vars;
+	}
+
+	/**
+	 * Assigns page structure variables.
+	 * @param array $vars Variables.
+	 */
+	protected final function AssignToStruct(array $vars)
+	{
+		$this->structVars += $vars;
 	}
 
 	/**
@@ -173,12 +187,12 @@ abstract class FullPage extends Page
 		return TemplateProcessor::ProcessTemplate(
 			'page_structure.tpl',
 			[
-				'title' => $this->title,
-				'page' => $generatedPage,
+				'title'        => $this->title,
+				'page'         => $generatedPage,
 				'js_page_data' => $pageData,
-				'css' => $this->css,
-				'js' => $this->js,
-			]
+				'css'          => $this->css,
+				'js'           => $this->js,
+			] + $this->structVars
 		);
 	}
 }
